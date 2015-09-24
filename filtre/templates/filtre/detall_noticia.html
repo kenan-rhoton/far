@@ -1,0 +1,26 @@
+{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'filtre/style.css' %}" />
+
+<div id="wrap">
+
+{% include 'filtre/header.html' %}
+
+<div id="content">
+<div class="left"> 
+
+<h2>{{ noticia.titol }}</h2>
+
+<div class="articles">
+<p>Data: {{noticia.data}}</p>
+<p>Font: <a href="{% url 'filtre:detall font' noticia.font.id %}">{{ noticia.font.nom }}</a></p>
+
+</div>
+</div>
+
+{% include 'filtre/sidebar.html' %}
+
+{% include 'filtre/footer.html' %}
+
+</div>
+</div>

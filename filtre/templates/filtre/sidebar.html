@@ -1,0 +1,12 @@
+<div class="right">
+<h2>Fonts</h2>
+{% if fonts %}
+    <ul>
+    {% for font in fonts %}
+        <li><a href="{% url 'filtre:detall font' font.id %}">{{ font.nom }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No hi han fonts!</p>
+{% endif %}
+</div>

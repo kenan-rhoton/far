@@ -1,0 +1,34 @@
+{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'filtre/style.css' %}" />
+
+<div id="wrap">
+
+{% include 'filtre/header.html' %}
+
+<div id="content">
+<div class="left"> 
+
+<h2>{{ font.nom }}</h2>
+
+<div class="articles">
+<p>URL: <a href="{{font.url}}">{{font.url}}</a></p>
+<p>S'actualitza a les: {{font.horari}}</p>
+<p>Paraules clau: {{font.frases}}</p>
+<a href="{% url 'filtre:actualitza font' font.id %}">Actualitza la Font</a>
+
+<h2>Not&iacute;cies d'aquesta font</h1>
+<ul>
+{% for noticia in noticies %}
+	<li><a href="{% url 'filtre:detall noticia' noticia.id %}">{{noticia.titol}}</a></li>
+{% endfor %}
+</ul>
+</div>
+</div>
+
+{% include 'filtre/sidebar.html' %}
+
+{% include 'filtre/footer.html' %}
+
+</div>
+</div>
