@@ -5,3 +5,4 @@ packaging==15.3
 pyxdg==0.25
 requests==2.7.0
 virtualenv==13.1.2
+whitenoise==2.0.4
