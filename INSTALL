@@ -2,3 +2,6 @@ This project requires:
 
 python-lxml
 python-requests
+python-pip (Heroku)
+pip install virtualenv (Heroku)
+ruby (Heroku)
