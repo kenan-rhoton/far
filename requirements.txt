@@ -3,5 +3,4 @@ lxml==3.4.4
 packaging==15.3
 pyxdg==0.25
 requests==2.7.0
-team==1.0
 virtualenv==13.1.2
