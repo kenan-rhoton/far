@@ -7,20 +7,28 @@
 {% include 'filtre/header.html' %}
 
 <div id="content">
-<div class="left"> 
+<div class="left">
 
 <h2>{{ font.nom }}</h2>
 
 <div class="articles">
 <p>URL: <a href="{{font.url}}">{{font.url}}</a></p>
 <p>S'actualitza a les: {{font.horari}}</p>
-<p>Paraules clau: {{font.frases}}</p>
+<p>Paraules clau: {{frases}}</p>
 <a href="{% url 'filtre:actualitza font' font.id %}">Actualitza la Font</a>
+
+{% if font.haserror %}
+
+    {{ font.noerror }}
+
+    <h3>Hi ha hagut un error, contacta amb un administrador</h3>
+
+{% endif %}
 
 <h2>Not&iacute;cies d'aquesta font</h1>
 <ul>
 {% for noticia in noticies %}
-	<li><a href="{% url 'filtre:detall noticia' noticia.id %}">{{noticia.titol}}</a></li>
+    <li><a href="{% url 'filtre:detall noticia' noticia.id %}">{{noticia.titol}}</a></li>
 {% endfor %}
 </ul>
 </div>
