@@ -21,8 +21,9 @@ class NoticiaAdmin(admin.ModelAdmin):
     ]
 	
 class CatalegAdmin(admin.ModelAdmin):
+        list_display = ('nom')
 	fieldsets = [
-		(None, {'fields': ['frases', 'fonts']}),
+		(None, {'fields': ['nom', 'frases', 'fonts']}),
 	]
 
 admin.site.register(Font, FontAdmin)
