@@ -21,7 +21,7 @@ class NoticiaAdmin(admin.ModelAdmin):
     ]
 	
 class CatalegAdmin(admin.ModelAdmin):
-    list_display = ('nom')
+    list_display = ('nom',)
     fieldsets = [
         (None, {'fields': ['nom', 'frases', 'fonts']}),
     ]

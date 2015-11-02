@@ -21,12 +21,14 @@ def detall_noticia(request, noticia_id):
 
 
 def detall_font(request, font_id):
-  font = get_object_or_404(Font, pk=font_id)
-  noticies = font.noticia_set.all()
-  frases = ""
-  for cat in font.cataleg_set.all():
-    frases += cat.frases + ";"
-  return render(request, 'filtre/detall_font.html', {'font':font, 'noticies': noticies, 'fonts': Font.objects.all(), 'frases': frases })
+    font = get_object_or_404(Font, pk=font_id)
+    noticies = font.noticia_set.all()
+    frases = ""
+    for cat in font.cataleg_set.all():
+        frases += cat.frases + ";"
+    error = font.haserror
+    font.haserror = False
+    return render(request, 'filtre/detall_font.html', {'font':font, 'noticies': noticies, 'fonts': Font.objects.all(), 'frases': frases, 'error': error })
 
 def actualitza_font(request, font_id):
   f = get_object_or_404(Font, pk=font_id)

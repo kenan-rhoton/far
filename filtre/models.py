@@ -33,3 +33,5 @@ class Cataleg(models.Model):
     nom = models.CharField(max_length=200)
     frases = models.TextField()
     fonts = models.ManyToManyField(Font)
+    def __str__(self):
+        return self.nom

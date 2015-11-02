@@ -17,9 +17,7 @@
 <p>Paraules clau: {{frases}}</p>
 <a href="{% url 'filtre:actualitza font' font.id %}">Actualitza la Font</a>
 
-{% if font.haserror %}
-
-    {{ font.noerror }}
+{% if error %}
 
     <h3>Hi ha hagut un error, contacta amb un administrador</h3>
 
