@@ -43,7 +43,7 @@ def actualitza_font(request, font_id):
   catalegs = f.cataleg_set.all()
   keys = []
   for cat in catalegs:
-    keys += re.split('[;]',cat.frases)
+    keys += re.split('[;:, \n]',cat.frases)
   #FUTURE WORK:
   #añadir texto y url
   #Comprobar errores (no fallar si no hay internet)
