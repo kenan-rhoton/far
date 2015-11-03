@@ -25,7 +25,7 @@ def detall_font(request, font_id):
     noticies = font.noticia_set.all()
     frases = ""
     for cat in font.cataleg_set.all():
-        frases += cat.frases + ";"
+        frases += cat.nom + "<br>"
     error = font.haserror
     font.haserror = False
     return render(request, 'filtre/detall_font.html', {'font':font, 'noticies': noticies, 'fonts': Font.objects.all(), 'frases': frases, 'error': error })
