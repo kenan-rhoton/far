@@ -1,8 +1,17 @@
+dj-database-url==0.3.0
+dj-static==0.0.6
 Django==1.8.4
 gunicorn==19.3.0
 lxml==3.4.4
+mps-youtube==0.2.5
 packaging==15.3
+pafy==0.3.74
+psycopg2==2.6.1
+pystache==0.5.4
 pyxdg==0.25
 requests==2.7.0
+static==1.1.1
+static3==0.6.1
+team==1.0
 virtualenv==13.1.2
 whitenoise==2.0.4
