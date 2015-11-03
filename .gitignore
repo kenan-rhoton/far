@@ -1,3 +1,4 @@
 far/__pycache__/*
 filtre/__pycache__/*
 filtre/migrations/__pycache__/*
+db.sqlite3
