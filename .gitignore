@@ -6,3 +6,4 @@ staticfiles/*
 *.swp
 *.swo
 tags
+latest.dump

@@ -20,7 +20,7 @@ class Font(models.Model):
         self.haserror = False
 
 class Noticia(models.Model):
-    titol = models.CharField(max_length=200)
+    titol = models.CharField(max_length=500)
     data = models.DateTimeField('Data de publicació')
     #FUTURE WORK
     #text = models.CharField(max_length=200)
