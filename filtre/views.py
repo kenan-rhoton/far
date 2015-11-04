@@ -52,9 +52,10 @@ def actualitza_font(request, font_id):
   for dat in dataset:
     if not f.noticia_set.filter(titol__exact = dat).exists():
       for key in keys:
-        if dat.lower().find(key) > -1:
-          n = Noticia(titol=dat,data=timezone.now(),font=f)
-          n.save()
-          break
+        if key != '':
+            if dat.lower().find(key) > -1:
+              n = Noticia(titol=dat,data=timezone.now(),font=f)
+              n.save()
+              break
 
   return HttpResponseRedirect(reverse('filtre:detall font', args=(f.id,)))

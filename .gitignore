@@ -7,3 +7,5 @@ staticfiles/*
 *.swo
 tags
 latest.dump
+far/local_settings.py
+local_settings.py
