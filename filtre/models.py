@@ -13,7 +13,6 @@ class Font(models.Model):
     #tipus: HTML o PDF
     horari = models.TimeField('Hora d\'actualització')
     haserror = models.BooleanField(default=False)
-    #frases = models.TextField()
     def __str__(self):
         return self.nom
     def noerror(self):

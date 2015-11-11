@@ -6,8 +6,11 @@ from django.utils import timezone
 from lxml import html
 import requests
 import re
+import logging
 
 from .models import Noticia, Font
+
+logger = logging.getLogger(__name__)
 
 def index(request):
     noticies = Noticia.objects.order_by('-data')
@@ -25,7 +28,7 @@ def detall_font(request, font_id):
     noticies = font.noticia_set.all()
     frases = ""
     for cat in font.cataleg_set.all():
-        frases += cat.nom + "\n"
+        frases += cat.nom + "</br>"
     error = font.haserror
     font.haserror = False
     return render(request, 'filtre/detall_font.html', {'font':font, 'noticies': noticies, 'fonts': Font.objects.all(), 'frases': frases, 'error': error })
@@ -45,17 +48,17 @@ def actualitza_font(request, font_id):
   catalegs = f.cataleg_set.all()
   keys = []
   for cat in catalegs:
-    keys += re.split('[;:, \n]',cat.frases)
+    keys += re.findall(r'[\w\d /\'\.]+',cat.frases)
   #FUTURE WORK:
   #añadir texto y url
   #Comprobar errores (no fallar si no hay internet)
+  logger.debug(keys)
   for dat in dataset:
     if not f.noticia_set.filter(titol__exact = dat).exists():
       for key in keys:
-        if key != '':
-            if dat.lower().find(key) > -1:
-              n = Noticia(titol=dat,data=timezone.now(),font=f)
-              n.save()
-              break
+        if dat.lower().find(key) > -1:
+          n = Noticia(titol=dat,data=timezone.now(),font=f)
+          n.save()
+          break
 
   return HttpResponseRedirect(reverse('filtre:detall font', args=(f.id,)))
