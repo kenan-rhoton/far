@@ -6,11 +6,11 @@ from django.utils import timezone
 from lxml import html
 import requests
 import re
-import logging
+#import logging
 
 from .models import Noticia, Font
 
-logger = logging.getLogger(__name__)
+#logger = logging.getLogger(__name__)
 
 def index(request):
     noticies = Noticia.objects.order_by('-data')
@@ -48,11 +48,11 @@ def actualitza_font(request, font_id):
   catalegs = f.cataleg_set.all()
   keys = []
   for cat in catalegs:
-    keys += re.findall(r'[\w\d /\'\.]+',cat.frases)
+    keys += re.findall(r'[\w\d /\'\.\(\)]+',cat.frases)
   #FUTURE WORK:
   #añadir texto y url
   #Comprobar errores (no fallar si no hay internet)
-  logger.debug(keys)
+  #logger.debug(keys)
   for dat in dataset:
     if not f.noticia_set.filter(titol__exact = dat).exists():
       for key in keys:
