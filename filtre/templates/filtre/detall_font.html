@@ -25,10 +25,10 @@
 
 {% endif %}
 
-<h2>Not&iacute;cies d'aquesta font</h1>
+<h2>Avisos d'aquesta font</h1>
 <ul>
-{% for noticia in noticies %}
-    <li><a href="{% url 'filtre:detall noticia' noticia.id %}">{{noticia.titol}}</a></li>
+{% for avis in avisos %}
+    <li><a href="{% url 'filtre:detall avis' avis.id %}">{{avis.coincidencia}}</a></li>
 {% endfor %}
 </ul>
 </div>

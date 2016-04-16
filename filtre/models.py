@@ -5,7 +5,7 @@ from django.db import models
 class Font(models.Model):
     nom = models.CharField(max_length=200)
     url = models.URLField(max_length=200)
-    path = models.CharField(max_length=200)
+    path = models.CharField(max_length=200) #Deprecated
     #FUTURE WORK
     #¿Find a better method than XPath selection?
     #textpath = models.CharField(max_length=200)
@@ -35,3 +35,11 @@ class Cataleg(models.Model):
     fonts = models.ManyToManyField(Font)
     def __str__(self):
         return self.nom
+
+class Avis(models.Model):
+    coincidencia = models.CharField(max_length=2000)
+    url = models.URLField(max_length=2000) #Potencialment no és el mateix que el de la Font (si es d'un document intern)
+    data = models.DateTimeField("Data de l'avís")
+    font = models.ForeignKey(Font)
+    def __str__(self):
+        return self.coincidencia
