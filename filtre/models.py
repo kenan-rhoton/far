@@ -44,3 +44,6 @@ class Avis(models.Model):
     font = models.ForeignKey(Font)
     def __str__(self):
         return self.coincidencia
+    class Meta:
+        verbose_name = "avís"
+        verbose_name_plural = "avisos"
