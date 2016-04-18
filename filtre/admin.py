@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Font, Noticia, Cataleg
+from .models import Font, Avis, Cataleg
 
 class CatalegInline(admin.StackedInline):
 	model = Cataleg.fonts.through
@@ -14,18 +14,18 @@ class FontAdmin(admin.ModelAdmin):
     ]
 	inlines = [CatalegInline]
 	
-class NoticiaAdmin(admin.ModelAdmin):
+class AvisAdmin(admin.ModelAdmin):
 	#FUTURE WORK: text i URL
 	fieldsets = [
-        (None, {'fields': ['titol', 'data', 'font']}),
+        (None, {'fields': ['coincidencia', 'url', 'data', 'font']}),
     ]
 	
 class CatalegAdmin(admin.ModelAdmin):
-    list_display = ('nom')
+    list_display = ('nom',)
     fieldsets = [
         (None, {'fields': ['nom', 'frases', 'fonts']}),
     ]
 
 admin.site.register(Font, FontAdmin)
-admin.site.register(Noticia, NoticiaAdmin)
+admin.site.register(Avis, AvisAdmin)
 admin.site.register(Cataleg, CatalegAdmin)

@@ -38,6 +38,8 @@ class Cataleg(models.Model):
 
 class Avis(models.Model):
     coincidencia = models.CharField(max_length=2000)
+    tipus = models.CharField(max_length=20) #Pot ser Document o Web
+    pagina = models.IntegerField()
     url = models.URLField(max_length=2000) #Potencialment no és el mateix que el de la Font (si es d'un document intern)
     data = models.DateTimeField("Data de l'avís")
     font = models.ForeignKey(Font)

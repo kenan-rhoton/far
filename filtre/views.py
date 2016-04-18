@@ -72,7 +72,7 @@ def comprova_font(request, font_id):
             for key in keys:
                 if d.lower().find(key) > -1:
                     #Falta purgar la coincidencia de la d
-                    n = Avis(coincidencia=d,url=f.url,data=timezone.now(),font=f)
+                    n = Avis(coincidencia=d,tipus='Web',url=f.url,data=timezone.now(),font=f)
                     n.save()
                     break
 
@@ -96,7 +96,7 @@ def comprova_font(request, font_id):
                         for key in keys:
                             if line.lower().find(key) > -1:
                                 #Mejorar las coincidencias
-                                n = Avis(coincidencia=line,url=docurl,data=timezone.now(),font=f)
+                                n = Avis(coincidencia=line,tipus="Document",pagina=i,url=docurl,data=timezone.now(),font=f)
                                 n.save()
                                 break
 
