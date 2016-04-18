@@ -6,8 +6,11 @@ from django.utils import timezone
 from lxml import html
 import requests
 import re
+#import logging
 
 from .models import Noticia, Font
+
+#logger = logging.getLogger(__name__)
 
 def index(request):
     

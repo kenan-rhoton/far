@@ -13,14 +13,13 @@ class Font(models.Model):
     #tipus: HTML o PDF
     horari = models.TimeField('Hora d\'actualització')
     haserror = models.BooleanField(default=False)
-    #frases = models.TextField()
     def __str__(self):
         return self.nom
     def noerror(self):
         self.haserror = False
 
 class Noticia(models.Model):
-    titol = models.CharField(max_length=200)
+    titol = models.CharField(max_length=500)
     data = models.DateTimeField('Data de publicació')
     #FUTURE WORK
     #text = models.CharField(max_length=200)

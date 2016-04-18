@@ -14,16 +14,10 @@
 <div class="articles">
 <p>URL: <a href="{{font.url}}">{{font.url}}</a></p>
 <p>S'actualitza a les: {{font.horari}}</p>
-<p>Paraules clau: {{frases}}</p>
+<p>Catàlegs: {{frases}}</p>
 <a href="{% url 'filtre:actualitza font' font.id %}">Actualitza la Font</a>
 
-{% if font.haserror %}
-
-    {{ font.noerror }}
-
-    <h3>Hi ha hagut un error, contacta amb un administrador</h3>
-
-{% endif %}
+{% include 'filtre/error.html' %}
 
 <h2>Avisos d'aquesta font</h1>
 <ul>
