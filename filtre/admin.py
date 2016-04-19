@@ -10,14 +10,14 @@ class FontAdmin(admin.ModelAdmin):
 	list_display = ('nom', 'url', 'horari')
 	#FUTURE WORK: textpath i urlpath
 	fieldsets = [
-        (None, {'fields': ['nom', 'url', 'path', 'horari']}),
+        (None, {'fields': ['nom', 'url', 'horari']}),
     ]
 	inlines = [CatalegInline]
 	
 class AvisAdmin(admin.ModelAdmin):
 	#FUTURE WORK: text i URL
 	fieldsets = [
-        (None, {'fields': ['coincidencia', 'url', 'data', 'font']}),
+        (None, {'fields': ['coincidencia', 'url', 'tipus', 'pagina', 'data', 'font']}),
     ]
 	
 class CatalegAdmin(admin.ModelAdmin):

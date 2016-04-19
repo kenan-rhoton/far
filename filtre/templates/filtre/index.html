@@ -14,12 +14,12 @@
 <div class="articles">
 {% if noticies %}
     <ul>
-    {% for noticia in noticies %}
-        <li><a href="{% url 'filtre:detall noticia' noticia.id %}">{{ noticia.titol }}</a></li>
+    {% for avis in avisos %}
+        <li><a href="{% url 'filtre:detall avis' avis.id %}">{{ avis.font.nom }}</a></li>
     {% endfor %}
     </ul>
 {% else %}
-    <p>No hi han not&iacute;cies!</p>
+    <p>No hi han avisos!</p>
 {% endif %}
 </div>
 </div>

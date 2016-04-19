@@ -8,23 +8,18 @@ import requests
 import re
 #import logging
 
-from .models import Noticia, Font
+from .models import Avis, Font
 
 #logger = logging.getLogger(__name__)
 
 def index(request):
     
-    noticies = Noticia.objects.order_by('-data')
+    avisos = Avis.objects.order_by('-data')
     fonts = Font.objects.all()
-    context = {'noticies': noticies, 'fonts':fonts,}
+    context = {'avisos': avisos, 'fonts':fonts,}
     return render(request, 'filtre/index.html', context)
 
 
-
-def detall_noticia(request, noticia_id):
-
-    noticia = get_object_or_404(Noticia, pk=noticia_id)
-    return render(request, 'filtre/detall_noticia.html', {'noticia':noticia, 'fonts': Font.objects.all()})
 
 def detall_avis(request, avis_id):
 
