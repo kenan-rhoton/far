@@ -48,11 +48,12 @@ def comprova_font(request, font_id):
     import urllib.request
     import shutil
     import django.utils.text
+    from django.core.files import File
     
     with urllib.request.urlopen(f.url) as response, open(django.utils.text.get_valid_filename(f.url + "1"), 'wb') as out_file:
         shutil.copyfileobj(response,out_file)
 
-    oldfile = open(django.utils.text.get_valid_filename(f.url), 'U', encoding='utf-8', errors='ignore')
+    oldfile = f.webfile.open('U', encoding='utf-8', errors='ignore')
     newfile = open(django.utils.text.get_valid_filename(f.url + "1"), 'U', encoding='utf-8', errors='ignore')
 
     import difflib
@@ -103,42 +104,7 @@ def comprova_font(request, font_id):
                                 n = Avis(coincidencia=line,tipus="Document",pagina=i,url=docurl,data=timezone.now(),font=f)
                                 n.save()
                                 break
+            f.webfile.save(get_valid_filename(f.url), File(oldfile))
 
     return HttpResponseRedirect(reverse('filtre:detall font', args=(f.id,)))
 
-
-def actualitza_font(request, font_id):
-
-    f = get_object_or_404(Font, pk=font_id)
-    
-    try:
-        page = requests.get(f.url)
-    except:
-        f.haserror = True
-        return HttpResponseRedirect(reverse('filtre:detall font', args=(f.id,)))
-    
-    if page.status_code != 200:
-        f.haserror = True
-        return HttpResponseRedirect(reverse('filtre:detall font', args=(f.id,)))
-    
-    tree = html.fromstring(page.text)
-    dataset = tree.xpath(f.path)
-    catalegs = f.cataleg_set.all()
-    keys = []
-    
-    for cat in catalegs:
-        keys += re.split('[;:, \n]',cat.frases)
-    
-    #FUTURE WORK:
-    #añadir texto y url
-    #Comprobar errores (no fallar si no hay internet)
-    
-    for dat in dataset:
-        if not f.noticia_set.filter(titol__exact = dat).exists():
-            for key in keys:
-                if dat.lower().find(key) > -1:
-                    n = Noticia(titol=dat,data=timezone.now(),font=f)
-                    n.save()
-                    break
-
-    return HttpResponseRedirect(reverse('filtre:detall font', args=(f.id,)))
