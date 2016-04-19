@@ -48,7 +48,7 @@ def comprova_font(request, font_id):
     import urllib.request
     import shutil
     
-    with urllib.request.urlopen(f.url) as response, open(f.url + "1", 'wb') as out_file:
+    with urllib.request.urlopen(f.url) as response, open(f.url + "1", 'w+b') as out_file:
         shutil.copyfileobj(response,out_file)
 
     oldfile = open(f.url, 'U', encoding='utf-8', errors='ignore')
@@ -86,7 +86,7 @@ def comprova_font(request, font_id):
                 if not (re.match("http://", docurl) or re.match("www", docurl)):
                     docurl = f.url + docurl
                 import PyPDF2
-                with urllib.request.urlopen(docurl) as response, open('tmp.pdf', 'wb') as out_file:
+                with urllib.request.urlopen(docurl) as response, open('tmp.pdf', 'w+b') as out_file:
                     shutil.copyfileobj(response,out_file)
 
                 fp = open("tmp.pdf", 'rb')
