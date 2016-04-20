@@ -42,14 +42,18 @@ def comprova_font(request, font_id):
 
     import urllib.request
     import shutil
-    import django.utils.text
+    from django.utils.text import get_valid_filename
     from django.core.files import File
     
-    with urllib.request.urlopen(f.url) as response, open(django.utils.text.get_valid_filename(f.url + "1"), 'wb') as out_file:
+    with urllib.request.urlopen(f.url) as response, open(get_valid_filename(f.url + "1"), 'wb') as out_file:
         shutil.copyfileobj(response,out_file)
 
-    oldfile = f.webfile.open('U', encoding='utf-8', errors='ignore')
-    newfile = open(django.utils.text.get_valid_filename(f.url + "1"), 'U', encoding='utf-8', errors='ignore')
+    try:
+        oldfile = f.webfile.open('U')
+    except ValueError as v:
+        oldfile = open("tmpfile.tmp", 'U', encoding='utf-8', errors='ignore')
+        
+    newfile = open(get_valid_filename(f.url + "1"), 'U', encoding='utf-8', errors='ignore')
 
     import difflib
 
@@ -66,9 +70,13 @@ def comprova_font(request, font_id):
     for cat in catalegs:
         keys += re.split('[;:, \n]',cat.frases)
 
+    match = False
+
     for d in diff:
         if diffregex.match(d): #Do the cataleg search
-            
+
+            match = True
+
             for key in keys:
                 if d.lower().find(key) > -1:
                     #Falta purgar la coincidencia de la d
@@ -81,7 +89,14 @@ def comprova_font(request, font_id):
             if res: #Do the doc search
                 docurl=res.group()[9:]
                 if not (re.match("http://", docurl) or re.match("www", docurl)):
-                    docurl = f.url + docurl
+
+                    cleanUrl = re.match('http://[^/]*', f.url)
+                    if cleanUrl is None:
+                        cleanUrl = re.match('[^/]*', f.url)
+                    
+                    trueUrl = cleanUrl.group()
+                    docurl = trueUrl + docurl
+                
                 import PyPDF2
                 with urllib.request.urlopen(docurl) as response, open('tmp.pdf', 'wb') as out_file:
                     shutil.copyfileobj(response,out_file)
@@ -99,7 +114,10 @@ def comprova_font(request, font_id):
                                 n = Avis(coincidencia=line,tipus="Document",pagina=i,url=docurl,data=timezone.now(),font=f)
                                 n.save()
                                 break
-            f.webfile.save(get_valid_filename(f.url), File(oldfile))
+    if match == True:
+        newfile.close()
+        newfile = open(get_valid_filename(f.url + "1"), 'rb')
+        tmpfile = File(newfile)
+        f.webfile.save(get_valid_filename(f.url), tmpfile)
 
     return HttpResponseRedirect(reverse('filtre:detall font', args=(f.id,)))
-

@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 	'filtre',
+    'db_file_storage',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -86,6 +87,8 @@ DATABASES = {
     }
 }
 
+
+DEFAULT_FILE_STORAGE = 'db_file_storage.storage.DatabaseFileStorage'
 
 LOGGING = {
     'version': 1,

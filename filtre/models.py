@@ -5,7 +5,7 @@ from django.db import models
 class Font(models.Model):
     nom = models.CharField(max_length=200)
     url = models.URLField(max_length=200)
-    webfile = models.FileField(null=True)
+    webfile = models.FileField(upload_to='filtre.WebFileModel/dades/nom/mimetype', blank=True, null=True)
     #FUTURE WORK
     #¿Find a better method than XPath selection?
     #textpath = models.CharField(max_length=200)
@@ -25,7 +25,7 @@ class Cataleg(models.Model):
 class Avis(models.Model):
     coincidencia = models.CharField(max_length=2000)
     tipus = models.CharField(max_length=20) #Pot ser Document o Web
-    pagina = models.IntegerField()
+    pagina = models.IntegerField(null=True)
     url = models.URLField(max_length=2000) #Potencialment no és el mateix que el de la Font (si es d'un document intern)
     data = models.DateTimeField("Data de l'avís")
     font = models.ForeignKey(Font)
@@ -34,3 +34,10 @@ class Avis(models.Model):
     class Meta:
         verbose_name = "avís"
         verbose_name_plural = "avisos"
+
+## FOR DB FILE STORAGE
+
+class WebFileModel(models.Model):
+    dades = models.TextField()
+    nom = models.CharField(max_length=255)
+    mimetype = models.CharField(max_length=50)
