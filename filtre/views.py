@@ -13,7 +13,7 @@ from .models import Avis, Font
 from rq import Queue
 from worker import conn
 
-q = Queue(Connection=conn)
+q = Queue(connection=conn)
 
 #logger = logging.getLogger(__name__)
 
@@ -43,6 +43,7 @@ def detall_font(request, font_id):
     return render(request, 'filtre/detall_font.html', {'font':font, 'avisos': avisos, 'fonts': Font.objects.all(), 'frases': frases })
 
 def comprova_font(request, font_id):
+    f = get_object_or_404(Font, pk=font_id)
     result = q.enqueue(comprovar_font, font_id)
     return HttpResponseRedirect(reverse('filtre:detall font', args=(f.id,)))
 
