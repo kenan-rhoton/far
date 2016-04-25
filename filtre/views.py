@@ -42,7 +42,7 @@ def detall_font(request, font_id):
         frases += cat.frases + ";"
     return render(request, 'filtre/detall_font.html', {'font':font, 'avisos': avisos, 'fonts': Font.objects.all(), 'frases': frases })
 
-def comprova_font(request, font_id):
+def comprova_font(request, font_id): #Li encasquetem la feina a un simpàtic Worker per evitar problemes de sincronització :)
     f = get_object_or_404(Font, pk=font_id)
     result = q.enqueue(comprovar_font, font_id)
     return HttpResponseRedirect(reverse('filtre:detall font', args=(f.id,)))
