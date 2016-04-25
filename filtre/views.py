@@ -61,7 +61,12 @@ def comprovar_font(request, font_id):
     try:
         oldfile = f.webfile.open('U')
     except ValueError as v:
-        oldfile = open("tmpfile.tmp", 'U', encoding='utf-8', errors='ignore')
+        newfile = open(get_valid_filename(f.url + "1"), 'rb')
+        tmpfile = File(newfile)
+        f.webfile.save(get_valid_filename(f.url), tmpfile)
+
+        return HttpResponseRedirect(reverse('filtre:detall font', args=(f.id,)))
+        #oldfile = open("tmpfile.tmp", 'U', encoding='utf-8', errors='ignore')
         
     newfile = open(get_valid_filename(f.url + "1"), 'U', encoding='utf-8', errors='ignore')
 
