@@ -7,5 +7,6 @@ urlpatterns = [
 	url(r'^avis/(?P<avis_id>[0-9]+)/$', views.detall_avis, name='detall avis'),
 	url(r'^font/(?P<font_id>[0-9]+)/$', views.detall_font, name='detall font'),
 	url(r'^comprova/(?P<font_id>[0-9]+)/$', views.comprova_font, name='comprova font'),
+        url(r'^test/(?P<text>[^/]+)$', views.test_view, name='test'),
 	url(r'^files/', include('db_file_storage.urls')),
 ]

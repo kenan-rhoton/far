@@ -1,6 +1,5 @@
 far/__pycache__/*
 filtre/__pycache__/*
-filtre/migrations/*
 db.sqlite3
 staticfiles/*
 *.swp
