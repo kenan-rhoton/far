@@ -1,6 +1,7 @@
 ## Aquí es defineixen els models de dades, quedarán reflectits a la Bases de Dades
 
 from django.db import models
+from db_file_storage.model_utils import delete_file, delete_file_if_needed
 
 # Aquest model conté informació sobre les Font's d'informació.
 # -   nom: conté el nom donat per l'administrador a la font
@@ -14,6 +15,14 @@ class Font(models.Model):
     horari = models.TimeField('Hora d\'actualització')
     def __str__(self):
         return self.nom
+
+    def save(self, *args, **kwargs):
+        delete_file_if_needed(self, 'webfile')
+        super(Font, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        super(Font, self).delete(*args, **kwargs)
+        delete_file(self, 'webfile')
 
 # Aquest model conté informació sobre els Catàlegs de paraules d'interés
 # -   nom: conté el nom donat per l'administrador al Catàleg

@@ -18,6 +18,7 @@ class FontAdmin(admin.ModelAdmin):
     ]
 	inlines = [CatalegInline]
 
+            
 ## Aquesta classe permet gestionar el Model Avis des de l'aplicació d'administració (tot i que no hauria de ser necessaria i apareix sobretot a nivell informatiu)
 class AvisAdmin(admin.ModelAdmin):
 	#FUTURE WORK: text i URL

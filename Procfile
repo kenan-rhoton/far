@@ -1,2 +1,2 @@
 web: gunicorn far.wsgi --log-file -
-worker: python worker.py
+worker: python manage.py rqworker high default low

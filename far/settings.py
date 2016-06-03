@@ -25,6 +25,10 @@ SECRET_KEY = 'm3@mx-zn!6&_0m=vvkhnvhgtyja8(=yaq+u1w!)%4=u%86myz9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+import sys
+
+TESTING = 'test' in sys.argv
+
 ALLOWED_HOSTS = [
     '.herokuapp.com',
     'localhost',
@@ -41,8 +45,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	'filtre',
+    'filtre',
     'db_file_storage',
+    'django_rq'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -76,6 +81,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'far.wsgi.application'
 
+RQ_QUEUES = {
+    'default': {
+        'URL': os.getenv('REDISTOGO_URL', 'redis://localhost:6379/0'), # If you're on Heroku
+        'DEFAULT_TIMEOUT': 500,
+    },
+    'high': {
+        'URL': os.getenv('REDISTOGO_URL', 'redis://localhost:6379/0'), # If you're on Heroku
+        'DEFAULT_TIMEOUT': 500,
+    },
+    'low': {
+        'URL': os.getenv('REDISTOGO_URL', 'redis://localhost:6379/0'), # If you're on Heroku
+        'DEFAULT_TIMEOUT': 500,
+    }
+}
+
+#RQ_EXCEPTION_HANDLERS = ['path.to.my.handler'] # If you need custom exception handlers
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases

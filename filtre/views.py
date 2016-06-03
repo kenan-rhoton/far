@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.utils import timezone
+from django.conf import settings
 
 from lxml import html
 import requests
@@ -10,10 +11,9 @@ import re
 
 from .models import Avis, Font
 
-from rq import Queue
-from worker import conn
+import django_rq
 
-q = Queue(connection=conn)
+from django_rq import job
 
 #logger = logging.getLogger(__name__)
 
@@ -25,7 +25,7 @@ def index(request):
     return render(request, 'filtre/index.html', context)
 
 def test_view(request, text):
-    return render(request, 'filtre/echo.html', text)
+    return render(request, 'filtre/echo.html', {'text':text})
 
 
 def detall_avis(request, avis_id):
@@ -49,35 +49,48 @@ def comprova_font(request, font_id):
     Li encasquetem la feina a un simpàtic Worker per evitar problemes de sincronització :)
     """
     f = get_object_or_404(Font, pk=font_id)
-    result = q.enqueue(comprovar_font, font_id)
+    if settings.TESTING:
+        comprovar_font(font_id)
+    else:
+        django_rq.enqueue(comprovar_font, font_id)
+    
     return HttpResponseRedirect(reverse('filtre:detall font', args=(f.id,)))
 
-def comprovar_font(request, font_id):
+@job
+def comprovar_font(font_id):
     f = get_object_or_404(Font, pk=font_id)
 
     import urllib.request
     import shutil
     from django.utils.text import get_valid_filename
     from django.core.files import File
-    
-    with urllib.request.urlopen(f.url) as response, open(get_valid_filename(f.url + "1"), 'wb') as out_file:
-        shutil.copyfileobj(response,out_file)
 
     try:
-        oldfile = f.webfile.open('U')
-    except ValueError as v:
-        newfile = open(get_valid_filename(f.url + "1"), 'rb')
-        tmpfile = File(newfile)
-        f.webfile.save(get_valid_filename(f.url), tmpfile)
+        with urllib.request.urlopen(f.url) as response, open(get_valid_filename(f.url), 'wb') as out_file:
+            shutil.copyfileobj(response,out_file)
+    except Exception as e:
+        return "There was an error with the request"
 
-        return HttpResponseRedirect(reverse('filtre:detall font', args=(f.id,)))
+    try:
+        f.webfile.open('U')
+    except ValueError as v:
+        with open(get_valid_filename(f.url), 'rb') as new_file:
+            f.webfile = File(new_file)
+            f.save()
+
+        return "Saved: " + get_valid_filename(f.url)
         #oldfile = open("tmpfile.tmp", 'U', encoding='utf-8', errors='ignore')
         
-    newfile = open(get_valid_filename(f.url + "1"), 'U', encoding='utf-8', errors='ignore')
+    newfile = open(get_valid_filename(f.url), 'U', encoding='utf-8', errors='ignore')
 
     import difflib
 
-    diff = difflib.unified_diff(oldfile.readlines(),newfile.readlines())
+    data = []
+
+    for line in f.webfile.readlines():
+        data.append(line.decode('utf-8', 'ignore'))
+
+    diff = difflib.unified_diff(data,newfile.readlines())
 
     import re
 
@@ -136,8 +149,8 @@ def comprovar_font(request, font_id):
                                 break
     if match == True:
         newfile.close()
-        newfile = open(get_valid_filename(f.url + "1"), 'rb')
+        newfile = open(get_valid_filename(f.url), 'rb')
         tmpfile = File(newfile)
         f.webfile.save(get_valid_filename(f.url), tmpfile)
 
-    return HttpResponseRedirect(reverse('filtre:detall font', args=(f.id,)))
+    return "Found match: " + str(match)

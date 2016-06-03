@@ -18,5 +18,7 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-	  url(r'^', include('filtre.urls', namespace="filtre")),
+    url(r'^django-rq/', include('django_rq.urls')),
+    url(r'^files/', include('db_file_storage.urls')),
+    url(r'^', include('filtre.urls', namespace="filtre")),
 ]

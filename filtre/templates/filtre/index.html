@@ -12,7 +12,7 @@
 
 <h2>Not&iacute;cies</h2>
 <div class="articles">
-{% if noticies %}
+{% if avisos %}
     <ul>
     {% for avis in avisos %}
         <li><a href="{% url 'filtre:detall avis' avis.id %}">{{ avis.font.nom }}</a></li>
