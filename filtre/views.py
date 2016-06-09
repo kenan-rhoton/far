@@ -46,6 +46,10 @@ def comprova_font(request, font_id):
     Li encasquetem la feina a un simpàtic Worker per evitar problemes de sincronització :)
     """
     f = get_object_or_404(Font, pk=font_id)
+    if not (re.match("http://", f.url) or re.match("www", f.url)):
+        f.url = request.build_absolute_uri(f.url)
+        f.save()
+
     if settings.TESTING:
         comprovar_font(font_id)
     else:
@@ -61,6 +65,7 @@ def comprovar_font(font_id):
     import shutil
     from django.utils.text import get_valid_filename
     from django.core.files import File
+
 
     try:
         with urllib.request.urlopen(f.url) as response, open(get_valid_filename(f.url), 'wb') as out_file:
