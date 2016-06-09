@@ -100,7 +100,7 @@ def comprovar_font(font_id):
     keys = []
     
     for cat in catalegs:
-        keys += re.split('[;:, \n]',cat.frases)
+        keys += re.split('[\n]',cat.frases)
 
     match = False
 

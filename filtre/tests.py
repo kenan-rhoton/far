@@ -105,6 +105,28 @@ class FontTests(LiveServerTestCase):
 
         self.assertEqual(len(Avis.objects.all()), 2)
 
+    def test_comprova_font_caracters_extranys_no_la_lien(self):
+        size = len(Avis.objects.all())
+        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("cabbages",)), horari=timezone.now())
+        f.save()
+        c = Cataleg(frases="Llei Orgànica 1/2004\nLlei catalana 5/2008\nviolència masclista\nviolència de genere\ndones assassinades\nvíctimes de violència de gènere\nsupervivents de violència\ndones immigrants\ntràfic de persones\nexplotació sexual\nintèrprets judicials\ntorns d'ofici amb especialització en matèria de violència de gènere\nviolència sexual\nformació i disponibilitat d'intèrprets\ndones refugiades\nesclavitud\ndenúncies de víctimes\nProtocol de Protecció de les Víctimes de Tràfic d'éssers Humans a Catalunya\nagressions sexuals\natenció sanitària\navortament")
+        c.save()
+        c.fonts.add(f)
+        c.save()
+
+        response = self.client.get(reverse('filtre:comprova font', args=(f.id,)), follow=True)
+
+        f.refresh_from_db()
+        f.url = self.live_server_url+reverse('filtre:test', args=("Llei Orgànica \n<br\>violència masclista\n<br\>denúncies\n<br\>avortament",))
+        f.save()
+
+        response = self.client.get(reverse('filtre:comprova font', args=(f.id,)), follow=True)
+
+        f.refresh_from_db()
+
+        self.assertEqual(len(Avis.objects.all()), 2)
+
+
 
     def test_comprova_no_afegeix_url_si_no_troba_coincidencia(self):
       """
