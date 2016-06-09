@@ -38,11 +38,8 @@ def detall_font(request, font_id):
     
     font = get_object_or_404(Font, pk=font_id)
     avisos = font.avis_set.all()
-    frases = ""
 
-    for cat in font.cataleg_set.all():
-        frases += cat.frases + ";"
-    return render(request, 'filtre/detall_font.html', {'font':font, 'avisos': avisos, 'fonts': Font.objects.all(), 'frases': frases })
+    return render(request, 'filtre/detall_font.html', {'font':font, 'avisos': avisos, 'fonts': Font.objects.all() })
 
 def comprova_font(request, font_id):
     """
