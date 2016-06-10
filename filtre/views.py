@@ -59,6 +59,88 @@ def actualitza_tot(request):
         res= comprova_font(request, f.id)
     return res
 
+def analitza_font(request, font_id):
+    f = get_object_or_404(Font, pk=font_id)
+    if settings.TESTING:
+        analitzar_font(font_id)
+    else:
+        django_rq.enqueue(analitzar_font, font_id)
+    return HttpResponseRedirect(reverse('filtre:detall font', args=(f.id,)))
+
+
+@job
+def analitzar_font(font_id):
+    f = get_object_or_404(Font, pk=font_id)
+
+    import urllib.request
+    import shutil
+    from django.utils.text import get_valid_filename
+    from django.core.files import File
+
+
+    try:
+        with urllib.request.urlopen(f.url) as response, open(get_valid_filename(f.url), 'wb') as out_file:
+            shutil.copyfileobj(response,out_file)
+    except Exception as e:
+        return "There was an error with the request"
+
+    newfile = open(get_valid_filename(f.url), 'U', encoding='utf-8', errors='ignore')
+
+    diff = newfile.readlines()
+
+    import re
+
+    docregex = re.compile('<a href="[^ ]*pdf')
+    
+    catalegs = f.cataleg_set.all()
+    keys = []
+    
+    for cat in catalegs:
+        keys += re.split('[\n]',cat.frases)
+
+    match = False
+
+    for d in diff:
+        for key in keys:
+            if d.lower().find(key) > -1:
+                #Falta purgar la coincidencia de la d
+                n = Avis(coincidencia=d,tipus='Web',url=f.url,data=timezone.now(),font=f)
+                n.save()
+                break
+
+        res = docregex.search(d)
+        
+        if res: #Do the doc search
+            docurl=res.group()[9:]
+            if not (re.match("http://", docurl) or re.match("www", docurl)):
+
+                cleanUrl = re.match('http://[^/]*', f.url)
+                if cleanUrl is None:
+                    cleanUrl = re.match('[^/]*', f.url)
+                
+                trueUrl = cleanUrl.group()
+                docurl = trueUrl + docurl
+            
+            import PyPDF2
+            with urllib.request.urlopen(docurl) as response, open('tmp.pdf', 'wb') as out_file:
+                shutil.copyfileobj(response,out_file)
+
+            fp = open("tmp.pdf", 'rb')
+            pdfReader = PyPDF2.PdfFileReader(fp)
+
+            for i in range(0,pdfReader.numPages-1):
+                pageObj = pdfReader.getPage(i)
+                txtlines = pageObj.extractText().splitlines()
+                for line in txtlines:
+                    for key in keys:
+                        if line.lower().find(key) > -1:
+                            #Mejorar las coincidencias
+                            n = Avis(coincidencia=line,tipus="Document",pagina=i,url=docurl,data=timezone.now(),font=f)
+                            n.save()
+                            break
+
+    return "OK"
+
 @job
 def comprovar_font(font_id):
     f = get_object_or_404(Font, pk=font_id)

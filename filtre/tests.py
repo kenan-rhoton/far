@@ -84,6 +84,21 @@ class FontTests(LiveServerTestCase):
 
         self.assertEqual(0,len(Avis.objects.all()))
 
+    def test_analitza_font_afegeix_avis_si_hi_ha_coincidencia(self):
+        size = len(Avis.objects.all())
+        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("potatoes\n<br\>potatoes\n<br\>cabbages\n<br\>soup potato",)), horari=timezone.now())
+        f.save()
+        c = Cataleg(frases="potatoes")
+        c.save()
+        c.fonts.add(f)
+        c.save()
+
+        response = self.client.get(reverse('filtre:analitza font', args=(f.id,)), follow=True)
+
+        f.refresh_from_db()
+
+        self.assertEqual(len(Avis.objects.all()), 2)
+
     def test_comprova_font_afegeix_avis_si_esta_inicialitzat_i_hi_ha_coincidencia(self):
         size = len(Avis.objects.all())
         f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("cabbages",)), horari=timezone.now())
