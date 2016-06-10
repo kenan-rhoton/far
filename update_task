@@ -1,0 +1,5 @@
+#!/usr/bin/env python
+
+import urllib.request
+
+urllib.request.urlopen("http://mighty-ridge-1447.herokuapp.com/actualitza_tot")

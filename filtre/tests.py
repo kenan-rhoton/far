@@ -126,6 +126,29 @@ class FontTests(LiveServerTestCase):
 
         self.assertEqual(len(Avis.objects.all()), 2)
 
+    def test_comprova_actualitza_tot_crea_arxius_correctament(self):
+        f1 = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("cabbages",)), horari=timezone.now())
+        f2 = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("cabbages",)), horari=timezone.now())
+        f3 = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("cabbages",)), horari=timezone.now())
+        f1.save()
+        f2.save()
+        f3.save()
+        c = Cataleg(frases="google")
+        c.save()
+        c.fonts.add(f1)
+        c.fonts.add(f2)
+        c.fonts.add(f3)
+        c.save()
+
+        response = self.client.get(reverse('filtre:actualitza tot'), follow=True)
+
+        f1.refresh_from_db()
+        f2.refresh_from_db()
+        f3.refresh_from_db()
+
+        self.assertNotEquals(f1.webfile.file.size,0)
+        self.assertNotEquals(f2.webfile.file.size,0)
+        self.assertNotEquals(f3.webfile.file.size,0)
 
 
     def test_comprova_no_afegeix_url_si_no_troba_coincidencia(self):

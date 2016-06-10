@@ -54,6 +54,11 @@ def comprova_font(request, font_id):
     
     return HttpResponseRedirect(reverse('filtre:detall font', args=(f.id,)))
 
+def actualitza_tot(request):
+    for f in Font.objects.all():
+        res= comprova_font(request, f.id)
+    return res
+
 @job
 def comprovar_font(font_id):
     f = get_object_or_404(Font, pk=font_id)
