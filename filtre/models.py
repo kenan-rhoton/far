@@ -13,6 +13,7 @@ class Font(models.Model):
     url = models.URLField(max_length=200)
     webfile = models.FileField(upload_to='filtre.WebFileModel/dades/nom/mimetype', blank=True, null=True)
     horari = models.TimeField('Hora d\'actualització')
+    catalegs = models.ManyToManyField('Cataleg', blank=True)
     def __str__(self):
         return self.nom
 
@@ -31,7 +32,7 @@ class Font(models.Model):
 class Cataleg(models.Model):
     nom = models.CharField(max_length=200)
     frases = models.TextField()
-    fonts = models.ManyToManyField(Font)
+    fonts = models.ManyToManyField(Font, blank=True)
     def __str__(self):
         return self.nom
 
