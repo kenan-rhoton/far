@@ -14,6 +14,9 @@
 <div class="articles">
 <p>Url: <a href="{{avis.url}}">Enllaç</a></p>
 <p>Font: <a href="{% url 'filtre:detall font' avis.font.id %}">{{ avis.font.nom }}</a></p>
+{% if avis.tipus == "Document" %}
+<p>Pàgina: {{avis.pagina}}</p>    
+{% endif %}
 
 </div>
 </div>
