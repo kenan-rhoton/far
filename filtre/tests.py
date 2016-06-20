@@ -86,7 +86,7 @@ class FontTests(LiveServerTestCase):
 
     def test_analitza_font_afegeix_avis_si_hi_ha_coincidencia(self):
         size = len(Avis.objects.all())
-        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("potatoes\n<br\>potatoes\n<br\>cabbages\n<br\>soup potato",)), horari=timezone.now())
+        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("potatoes\r\n<br\>potatoes\r\n<br\>cabbages\r\n<br\>soup potato",)), horari=timezone.now())
         f.save()
         c = Cataleg(frases="potatoes")
         c.save()
@@ -111,7 +111,7 @@ class FontTests(LiveServerTestCase):
         response = self.client.get(reverse('filtre:comprova font', args=(f.id,)), follow=True)
 
         f.refresh_from_db()
-        f.url = self.live_server_url+reverse('filtre:test', args=("potatoes\n<br\>potatoes\n<br\>cabbages\n<br\>soup potato",))
+        f.url = self.live_server_url+reverse('filtre:test', args=("potatoes\r\n<br\>potatoes\r\n<br\>cabbages\r\n<br\>soup potato",))
         f.save()
 
         response = self.client.get(reverse('filtre:comprova font', args=(f.id,)), follow=True)
@@ -124,7 +124,7 @@ class FontTests(LiveServerTestCase):
         size = len(Avis.objects.all())
         f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("cabbages",)), horari=timezone.now())
         f.save()
-        c = Cataleg(frases="Llei Orgànica 1/2004\nLlei catalana 5/2008\nviolència masclista\nviolència de genere\ndones assassinades\nvíctimes de violència de gènere\nsupervivents de violència\ndones immigrants\ntràfic de persones\nexplotació sexual\nintèrprets judicials\ntorns d'ofici amb especialització en matèria de violència de gènere\nviolència sexual\nformació i disponibilitat d'intèrprets\ndones refugiades\nesclavitud\ndenúncies de víctimes\nProtocol de Protecció de les Víctimes de Tràfic d'éssers Humans a Catalunya\nagressions sexuals\natenció sanitària\navortament")
+        c = Cataleg(frases="Llei Orgànica 1/2004\r\nLlei catalana 5/2008\r\nviolència masclista\r\nviolència de genere\r\ndones assassinades\r\nvíctimes de violència de gènere\r\nsupervivents de violència\r\ndones immigrants\r\ntràfic de persones\r\nexplotació sexual\r\nintèrprets judicials\r\ntorns d'ofici amb especialització en matèria de violència de gènere\r\nviolència sexual\r\nformació i disponibilitat d'intèrprets\r\ndones refugiades\r\nesclavitud\r\ndenúncies de víctimes\r\nProtocol de Protecció de les Víctimes de Tràfic d'éssers Humans a Catalunya\r\nagressions sexuals\r\natenció sanitària\r\navortament")
         c.save()
         c.fonts.add(f)
         c.save()
@@ -132,7 +132,7 @@ class FontTests(LiveServerTestCase):
         response = self.client.get(reverse('filtre:comprova font', args=(f.id,)), follow=True)
 
         f.refresh_from_db()
-        f.url = self.live_server_url+reverse('filtre:test', args=("Llei Orgànica \n<br\>violència masclista\n<br\>denúncies\n<br\>avortament",))
+        f.url = self.live_server_url+reverse('filtre:test', args=("Llei Orgànica \r\n<br\>violència masclista\r\n<br\>denúncies\r\n<br\>avortament",))
         f.save()
 
         response = self.client.get(reverse('filtre:comprova font', args=(f.id,)), follow=True)
@@ -197,17 +197,3 @@ class FontTests(LiveServerTestCase):
 
       self.assertEqual(size,len(Avis.objects.all()))
 
-    def test_actualitza_avisa_si_no_es_conecta(self):
-      """
-      Actualitzar avisa quan no hi ha conectivitat o problema similar
-      """
-      f = Font(nom="LHC",url="http://Aquestanoesunawebrealoaixoespero.cat/",horari=timezone.now())
-      f.save()
-      c = Cataleg(frases="potato")
-      c.save()
-      c.fonts.add(f)
-      c.save()
-
-      response = self.client.get(reverse('filtre:comprova font', args=(f.id,)), follow=True)
-
-      #self.assertContains(response, "contacta amb un administrador")

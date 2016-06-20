@@ -96,7 +96,7 @@ def analitzar_font(font_id):
     keys = []
     
     for cat in catalegs:
-        keys += re.split('[\n]',cat.frases)
+        keys += re.split('\r\n',cat.frases)
 
     match = False
 
@@ -187,7 +187,7 @@ def comprovar_font(font_id):
     keys = []
     
     for cat in catalegs:
-        keys += re.split('[\n]',cat.frases)
+        keys += re.split('\r\n',cat.frases)
 
     match = False
 
