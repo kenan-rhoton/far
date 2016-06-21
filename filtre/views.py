@@ -4,6 +4,8 @@ from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.conf import settings
 
+from datetime import timedelta
+
 from lxml import html
 import requests
 import re
@@ -20,9 +22,32 @@ from django_rq import job
 def index(request):
     
     avisos = Avis.objects.order_by('-data')
+    
+    
+    now = timezone.now()
+    avui = Avis.objects.filter(data__year=now.year, data__month=now.month, data__day=now.day).order_by('-data')
+    now = now - timedelta(1)
+    ahir = Avis.objects.filter(data__year=now.year, data__month=now.month, data__day=now.day).order_by('-data')
+    week = now - timedelta(7)
+    abans = Avis.objects.filter(data__range=(week, now)).order_by('-data')
+
+    avui_set = avisos_a_dict(avui)
+    ahir_set = avisos_a_dict(ahir)
+    abans_set = avisos_a_dict(abans)
+    
     fonts = Font.objects.all()
-    context = {'avisos': avisos, 'fonts':fonts,}
+    context = {'avisos': avisos, 'fonts':fonts, 'avui':avui_set, 'ahir':ahir_set, 'abans':abans_set,}
     return render(request, 'filtre/index.html', context)
+
+def avisos_a_dict(avisos):
+    ret_set = {}
+    for a in avisos:
+        if not a.font.nom in ret_set:
+            ret_set[a.font.nom] = {'font':a.font, 'num':1}
+        else:
+            ret_set[a.font.nom]['num'] = ret_set[a.font.nom]['num'] + 1
+
+    return ret_set
 
 def test_view(request, text):
     return render(request, 'filtre/echo.html', {'text':text})
@@ -37,9 +62,15 @@ def detall_avis(request, avis_id):
 def detall_font(request, font_id):
     
     font = get_object_or_404(Font, pk=font_id)
+    now = timezone.now()
     avisos = font.avis_set.all()
+    avui = avisos.filter(data__year=now.year, data__month=now.month, data__day=now.day).order_by('-data')
+    now = now - timedelta(1)
+    ahir = avisos.filter(data__year=now.year, data__month=now.month, data__day=now.day).order_by('-data')
+    week = now - timedelta(7)
+    abans = avisos.filter(data__range=(week, now)).order_by('-data')
 
-    return render(request, 'filtre/detall_font.html', {'font':font, 'avisos': avisos, 'fonts': Font.objects.all() })
+    return render(request, 'filtre/detall_font.html', {'font':font, 'avisos': avisos, 'fonts': Font.objects.all(), 'avui':avui, 'ahir':ahir, 'abans':abans })
 
 def comprova_font(request, font_id):
     """

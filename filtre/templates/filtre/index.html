@@ -12,15 +12,43 @@
 
 <h2>Not&iacute;cies</h2>
 <div class="articles">
-{% if avisos %}
+
+{% if avui %}
+
+    <h3>Avu&iacute;</h3>
+
     <ul>
-    {% for avis in avisos %}
-        <li><a href="{% url 'filtre:detall avis' avis.id %}">{{ avis.font.nom }}</a></li>
+    {% for nom, dades in avui.items %}
+        <li><a href="{% url 'filtre:detall font' dades.font.id %}"><b>{{ nom }}</b> ({{ dades.num }})</a></li>
     {% endfor %}
     </ul>
-{% else %}
-    <p>No hi han avisos!</p>
+    
 {% endif %}
+
+{% if ahir %}
+
+    <h3>Ahir</h3>
+
+    <ul>
+    {% for nom, dades in ahir.items %}
+        <li><a href="{% url 'filtre:detall font' dades.font.id %}"><b>{{ nom }}</b> ({{ dades.num }})</a></li>
+    {% endfor %}
+    </ul>
+    
+{% endif %}
+
+{% if abans %}
+
+    <h3>Abans</h3>
+
+    <ul>
+    {% for nom, dades in abans.items %}
+        <li><a href="{% url 'filtre:detall font' dades.font.id %}"><b>{{ nom }}</b> ({{ dades.num }})</a></li>
+    {% endfor %}
+    </ul>
+    
+{% endif %}
+
 </div>
 </div>
 

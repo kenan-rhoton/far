@@ -9,28 +9,41 @@
 <div id="content">
 <div class="left">
 
-<h2>{{ font.nom }}</h2>
+    <h2>{{ font.nom }}</h2>
 
-<div class="articles">
-<p>URL: <a href="{{font.url}}">{{font.url}}</a></p>
-<p>S'actualitza a les: {{font.horari}}</p>
-<p>
-Catàlegs: 
-{% for cat in font.cataleg_set.all %}
-{{ cat.nom }}<br/>
-{% endfor %}
-</p>
-<a href="{% url 'filtre:analitza font' font.id %}">Analitza la Font</a>
+    <div class="articles">
+        <p>URL: <a href="{{font.url}}">{{font.url}}</a></p>
+        <p>S'actualitza a les: {{font.horari}}</p>
+        <p>
+        Catàlegs: 
+        {% for cat in font.cataleg_set.all %}
+        {{ cat.nom }}<br/>
+        {% endfor %}
+        </p>
+        <a href="{% url 'filtre:analitza font' font.id %}">Analitza la Font</a>
 
-{% include 'filtre/error.html' %}
+        {% include 'filtre/error.html' %}
 
-<h2>Avisos d'aquesta font</h1>
-<ul>
-{% for avis in avisos %}
-    <li><a href="{% url 'filtre:detall avis' avis.id %}">{{avis.coincidencia}}</a></li>
-{% endfor %}
-</ul>
-</div>
+        <h2>Avisos d'aquesta font</h1>
+        <h3>Avu&iacute; ({{avui.count}})</h3>
+        {% for avis in avui %}
+            <li><a href="{% url 'filtre:detall avis' avis.id %}">{{avis.coincidencia}}</a></li>
+        {% empty %}
+            No hi han avisos
+        {% endfor %}
+        <h3>Ahir ({{ahir.count}})</h3>
+        {% for avis in ahir %}
+            <li><a href="{% url 'filtre:detall avis' avis.id %}">{{avis.coincidencia}}</a></li>
+        {% empty %}
+            No hi han avisos
+        {% endfor %}
+        <h3>Darrera setmana ({{abans.count}})</h3>
+        {% for avis in abans %}
+            <li><a href="{% url 'filtre:detall avis' avis.id %}">{{avis.coincidencia}}</a></li>
+        {% empty %}
+            No hi han avisos
+        {% endfor %}
+    </div>
 </div>
 
 {% include 'filtre/sidebar.html' %}

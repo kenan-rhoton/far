@@ -48,7 +48,7 @@ class Avis(models.Model):
     tipus = models.CharField(max_length=20) #Pot ser Document o Web
     pagina = models.IntegerField(null=True)
     url = models.URLField(max_length=2000) #Potencialment no és el mateix que el de la Font (si es d'un document intern)
-    data = models.DateTimeField("Data de l'avís")
+    data = models.DateTimeField("Data de l'avís", null=True, blank=True)
     font = models.ForeignKey(Font)
     def __str__(self):
         return self.coincidencia

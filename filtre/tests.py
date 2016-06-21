@@ -11,9 +11,6 @@ import time
 
 class FontTests(LiveServerTestCase):
 
-    def tearDown(self):
-        pass
-
     def test_es_crea_correctament(self):
         """
         Test innecessari per provar
@@ -197,3 +194,62 @@ class FontTests(LiveServerTestCase):
 
       self.assertEqual(size,len(Avis.objects.all()))
 
+    def test_avisos_generats_tenen_data(self):
+        size = len(Avis.objects.all())
+        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("potatoes\r\n<br\>potatoes\r\n<br\>cabbages\r\n<br\>soup potato",)), horari=timezone.now())
+        f.save()
+        c = Cataleg(frases="potatoes")
+        c.save()
+        c.fonts.add(f)
+        c.save()
+
+        response = self.client.get(reverse('filtre:analitza font', args=(f.id,)), follow=True)
+
+        f.refresh_from_db()
+
+        self.assertIsNotNone(Avis.objects.all()[0].data)
+
+    def test_avis_amb_data_apareix_al_detall_avis(self):
+        size = len(Avis.objects.all())
+        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("potatoes\r\n<br\>potatoes\r\n<br\>cabbages\r\n<br\>soup potato",)), horari=timezone.now())
+        f.save()
+        c = Cataleg(frases="potatoes")
+        c.save()
+        c.fonts.add(f)
+        c.save()
+
+        response = self.client.get(reverse('filtre:analitza font', args=(f.id,)), follow=True)
+        response = self.client.get(reverse('filtre:detall avis', args=(Avis.objects.all()[0].id,)), follow=True)
+
+        self.assertContains(response, "Data:")
+
+    def test_avis_amb_data_apareix_al_detall_font(self):
+        size = len(Avis.objects.all())
+        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("potatoes\r\n<br\>potatoes\r\n<br\>cabbages\r\n<br\>soup potato",)), horari=timezone.now())
+        f.save()
+        c = Cataleg(frases="potatoes")
+        c.save()
+        c.fonts.add(f)
+        c.save()
+
+        response = self.client.get(reverse('filtre:analitza font', args=(f.id,)), follow=True)
+        response = self.client.get(reverse('filtre:detall font', args=(f.id,)), follow=True)
+
+        self.assertContains(response, "Avu&iacute;")
+
+    def test_avisos_generen_font_i_num_avisos_al_index(self):
+        size = len(Avis.objects.all())
+        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("potatoes\r\n<br\>potatoes\r\n<br\>cabbages\r\n<br\>soup potato",)), horari=timezone.now())
+        f.save()
+        c = Cataleg(frases="potatoes")
+        c.save()
+        c.fonts.add(f)
+        c.save()
+
+        response = self.client.get(reverse('filtre:analitza font', args=(f.id,)), follow=True)
+        response = self.client.get(reverse('filtre:index'), follow=True)
+
+        self.assertContains(response, '<b>Test</b> (2)')
+
+    def test_avisos_soluciona_caracters_extranys(self):
+        pass
