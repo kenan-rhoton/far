@@ -27,19 +27,19 @@
         <h2>Avisos d'aquesta font</h1>
         <h3>Avu&iacute; ({{avui.count}})</h3>
         {% for avis in avui %}
-            <li><a href="{% url 'filtre:detall avis' avis.id %}">{{avis.coincidencia}}</a></li>
+            <li><a href="{% url 'filtre:detall avis' avis.id %}">{{avis.coincidencia|safe}}</a></li>
         {% empty %}
             No hi han avisos
         {% endfor %}
         <h3>Ahir ({{ahir.count}})</h3>
         {% for avis in ahir %}
-            <li><a href="{% url 'filtre:detall avis' avis.id %}">{{avis.coincidencia}}</a></li>
+            <li><a href="{% url 'filtre:detall avis' avis.id %}">{{avis.coincidencia|safe}}</a></li>
         {% empty %}
             No hi han avisos
         {% endfor %}
         <h3>Darrera setmana ({{abans.count}})</h3>
         {% for avis in abans %}
-            <li><a href="{% url 'filtre:detall avis' avis.id %}">{{avis.coincidencia}}</a></li>
+            <li><a href="{% url 'filtre:detall avis' avis.id %}">{{avis.coincidencia|safe}}</a></li>
         {% empty %}
             No hi han avisos
         {% endfor %}

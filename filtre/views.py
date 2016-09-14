@@ -135,7 +135,7 @@ def analitzar_font(font_id):
         for key in keys:
             if d.lower().find(key) > -1:
                 #Falta purgar la coincidencia de la d
-                n = Avis(coincidencia=d,tipus='Web',url=f.url,data=timezone.now(),font=f)
+                n = Avis(coincidencia=d.replace("™", "'"),tipus='Web',url=f.url,data=timezone.now(),font=f)
                 n.save()
                 break
 
@@ -166,7 +166,7 @@ def analitzar_font(font_id):
                     for key in keys:
                         if line.lower().find(key) > -1:
                             #Mejorar las coincidencias
-                            n = Avis(coincidencia=line,tipus="Document",pagina=i,url=docurl,data=timezone.now(),font=f)
+                            n = Avis(coincidencia=line.replace("™", "'"),tipus="Document",pagina=i,url=docurl,data=timezone.now(),font=f)
                             n.save()
                             break
 
@@ -230,7 +230,7 @@ def comprovar_font(font_id):
             for key in keys:
                 if d.lower().find(key) > -1:
                     #Falta purgar la coincidencia de la d
-                    n = Avis(coincidencia=d,tipus='Web',url=f.url,data=timezone.now(),font=f)
+                    n = Avis(coincidencia=d.replace("™", "'"),tipus='Web',url=f.url,data=timezone.now(),font=f)
                     n.save()
                     break
 
@@ -261,7 +261,7 @@ def comprovar_font(font_id):
                         for key in keys:
                             if line.lower().find(key) > -1:
                                 #Mejorar las coincidencias
-                                n = Avis(coincidencia=line,tipus="Document",pagina=i,url=docurl,data=timezone.now(),font=f)
+                                n = Avis(coincidencia=line.replace("™", "'"),tipus="Document",pagina=i,url=docurl,data=timezone.now(),font=f)
                                 n.save()
                                 break
     if match == True:

@@ -252,4 +252,18 @@ class FontTests(LiveServerTestCase):
         self.assertContains(response, '<b>Test</b> (2)')
 
     def test_avisos_soluciona_caracters_extranys(self):
-        pass
+        size = len(Avis.objects.all())
+        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("<div>potatoes\r\n<br\>™potatoes\r\n<br\>cabbages\r\n<br\>soup potato",)), horari=timezone.now())
+        f.save()
+        c = Cataleg(frases="potatoes")
+        c.save()
+        c.fonts.add(f)
+        c.save()
+
+        response = self.client.get(reverse('filtre:analitza font', args=(f.id,)), follow=True)
+
+        f.refresh_from_db()
+
+        self.assertNotContains(response,'™')
+        self.assertContains(response,'div')
+        self.assertNotContains(response,'&amp;')
