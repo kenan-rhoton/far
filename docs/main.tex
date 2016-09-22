@@ -67,7 +67,11 @@ Amnistia Internacional és una organització no gubernamental que defensa els dr
 
 Aquest projecte busca facilitar el màxim possible que qualsevol notícia d'interés per a Amnistia Internacional sigui inmediatament visible, indexada i accessible. Busca, en el fons, treure el màxim de feina a fer en quant a totes les accions que tenen a veure en la informació, per a que l'organització pugui centrar-se en prendre acció.
 
-I és per això el aquest projecte, com un far, intenta ajudar l'usuari a no perdre's en un mar d'informació, sino tenir al seu abast tota la informació que necessita quan la necessita, automatitzant al màxim totes les cerques i peticions possibles.
+I és per això que aquest projecte, com un far, intenta ajudar l'usuari a no perdre's en un mar d'informació, sino tenir al seu abast tota la informació que necessita quan la necessita, automatitzant al màxim totes les cerques i peticions possibles.
+
+\newpage
+
+\tableofcontents
 
 \newpage
 
@@ -284,8 +288,8 @@ class WebFileModel(models.Model):
     \begin{description}
         \item[Donat] que som a la pàgina d'administració
         \item[Quan] l'usuari s'autentica correctament com a administrador
-        \item[I] fa clic a la secció "Fonts"
-        \item[I] fa clic a "Afegir font"
+        \item[I] fa clic a la secció ``Fonts''
+        \item[I] fa clic a ``Afegir font''
         \item[I] omple els camps amb nom, url, horari d'actualització i, opcionalment, els catàlegs rellevants
         \item[I] guarda la font
         \item[Aleshores] al visitar la pàgina principal apareix la font creada al llistat de fonts
@@ -299,8 +303,8 @@ class WebFileModel(models.Model):
     \begin{description}
         \item[Donat] que som a la pàgina d'administració
         \item[Quan] l'usuari s'autentica correctament com a administrador
-        \item[I] fa clic a la secció "Catàlegs"
-        \item[I] fa clic a "Afegir catàleg"
+        \item[I] fa clic a la secció ``Catàlegs''
+        \item[I] fa clic a ``Afegir catàleg''
         \item[I] omple els camps amb nom, paraules clau i, opcionalment, les fonts on es fa servir
         \item[I] guarda el catàleg
         \item[I] visita la pàgina principal
@@ -310,8 +314,41 @@ class WebFileModel(models.Model):
 \end{description}
 
 \subsubsection{Consultar els avisos}
+
+\begin{description}
+    \item[Escenari]: Un usuari vol consultar els avisos recents
+    \begin{description}
+        \item[Donat] que som a la pàgina principal
+        \item[I] que existeix algún avís recent
+        \item[Aleshores] apareix el llistat de avisos recents
+    \end{description}
+\end{description}
+
 \subsubsection{Consultar una font}
+
+\begin{description}
+    \item[Escenari]: Un usuari vol consultar els avisos recents d'una font específica
+    \begin{description}
+        \item[Donat] que som a la pàgina principal
+        \item[I] que existeix algún avís recent de la font
+        \item[Quan] l'usuari clica sobre la font que vol comprovar
+        \item[Aleshores] apareixen els detalls de la font
+        \item[I] el llistat de avisos recents d'aquella font
+    \end{description}
+\end{description}
+
 \subsubsection{Consultar la informació d'un avís}
+
+\begin{description}
+    \item[Escenari]: Un usuari vol consultar la informació d'un avís
+    \begin{description}
+        \item[Donat] que som a la pàgina principal
+        \item[I] que existeix algún avís recent
+        \item[Quan] l'usuari clica sobre l'avís que vol comprovar
+        \item[Aleshores] apareixen els detalls de l'avís
+        \item[I] l'usuari pot clicar a l'enllaç proporcionat per veure l'avís sencer a la font original
+    \end{description}
+\end{description}
 
 
 \newpage
@@ -425,6 +462,10 @@ Pel deployment del projecte s'ha decidit fer servir Heroku per diversos motius:
 
 \newpage
 
+\subsection{Implementació}
+
+\newpage
+
 \subsection{Problemes trobats}
 
 \subsubsection{Amb la nostra solució}
@@ -476,7 +517,7 @@ Però com per a Amnistia Internacional result vital aquesta part, hem fet estudi
 
 \section{Sprints reals realitzats}
 
-\subsection{Setembre.1 2015 - 20h}
+\subsection{Setembre.1 2015 --- 20h}
 
 \begin{itemize}
     \item Reunió amb Xavi per discutir el projecte.
@@ -497,7 +538,7 @@ Però com per a Amnistia Internacional result vital aquesta part, hem fet estudi
     \end{itemize}
 \end{itemize}
 
-\subsection{Setembre.2 2015 - 40h}
+\subsection{Setembre.2 2015 --- 40h}
 
 \begin{itemize}
     \item  Construcció inicial
@@ -515,14 +556,14 @@ Però com per a Amnistia Internacional result vital aquesta part, hem fet estudi
     \item  Traspàs a PostgreSQL per motius de Heroku
 \end{itemize}
 
-\subsection{Octubre 2015 - 20h}
+\subsection{Octubre 2015 --- 20h}
 
 \begin{itemize}
     \item Reunió amb Eduard: Catàlegs de paraules
     \item Canvis en ús de Catàlegs
 \end{itemize}
 
-\subsection{Novembre 2015 - 60h}
+\subsection{Novembre 2015 --- 60h}
 
 \begin{itemize}
     \item Reunió amb Eduard: importància de PDFs
@@ -531,21 +572,21 @@ Però com per a Amnistia Internacional result vital aquesta part, hem fet estudi
     \item Intent fallit amb PDFMiner molt costós en temps
 \end{itemize}
 
-\subsection{Febrer-Març 2016 - 40h}
+\subsection{Febrer-Març 2016 --- 40h}
 
 \begin{itemize}
     \item Intent exitós amb PyPDF2
     \item Configuració PyPDF2 i introducció d'anàlisi de Documents
 \end{itemize}
 
-\subsection{Abril 2016 - 10h}
+\subsection{Abril 2016 --- 10h}
 
 \begin{itemize}
     \item Reunió amb Eduard: Reestructuració de resultats i Avisos
     \item Canvia a paradigma d'avisos
 \end{itemize}
 
-\subsection{Juny 2016 - 30h}
+\subsection{Juny 2016 --- 30h}
 
 \begin{itemize}
     \item Reunió amb Eduard: Anàlisi inmediat de fonts
