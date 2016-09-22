@@ -23,24 +23,24 @@
 
         {% include 'filtre/error.html' %}
 
-        <h2>Avisos d'aquesta font</h1>
-        <h3>Avu&iacute; ({{avui.count}})</h3>
-        {% for avis in avui %}
-            <li><a href="{% url 'filtre:detall avis' avis.id %}">{{avis.coincidencia|safe}}</a></li>
-        {% empty %}
-            No hi han avisos
-        {% endfor %}
-        <h3>Ahir ({{ahir.count}})</h3>
-        {% for avis in ahir %}
-            <li><a href="{% url 'filtre:detall avis' avis.id %}">{{avis.coincidencia|safe}}</a></li>
-        {% empty %}
-            No hi han avisos
-        {% endfor %}
-        <h3>Darrera setmana ({{abans.count}})</h3>
-        {% for avis in abans %}
-            <li><a href="{% url 'filtre:detall avis' avis.id %}">{{avis.coincidencia|safe}}</a></li>
-        {% empty %}
-            No hi han avisos
+        <h2>Avisos d'aquesta font</h2>
+        {% for data, documents in dates %}
+            <h3>{{data}}</h3>
+            <ul class="avisos">
+            {% for document, pages in documents.items %}
+                <li>Document: <a href="{{document}}">{{document}}</a>
+                <ul>
+                {% for page, paraules in pages %}
+                    <li>Pàg. {{page}}: 
+                    {% for paraula in paraules %}
+                        {{paraula}}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                    </li>
+                {% endfor %}
+                </ul>
+                </li>
+            {% endfor %}
+            </ul>
         {% endfor %}
     </div>
 </div>

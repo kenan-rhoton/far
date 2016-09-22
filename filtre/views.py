@@ -28,7 +28,7 @@ def index(request):
     avui = Avis.objects.filter(data__year=now.year, data__month=now.month, data__day=now.day).order_by('-data')
     now = now - timedelta(1)
     ahir = Avis.objects.filter(data__year=now.year, data__month=now.month, data__day=now.day).order_by('-data')
-    week = now - timedelta(7)
+    week = now - timedelta(30)
     abans = Avis.objects.filter(data__range=(week, now)).order_by('-data')
 
     avui_set = avisos_a_dict(avui)
@@ -63,14 +63,49 @@ def detall_font(request, font_id):
     
     font = get_object_or_404(Font, pk=font_id)
     now = timezone.now()
-    avisos = font.avis_set.all()
-    avui = avisos.filter(data__year=now.year, data__month=now.month, data__day=now.day).order_by('-data')
-    now = now - timedelta(1)
-    ahir = avisos.filter(data__year=now.year, data__month=now.month, data__day=now.day).order_by('-data')
-    week = now - timedelta(7)
-    abans = avisos.filter(data__range=(week, now)).order_by('-data')
+    avisos = font.avis_set.order_by('data')
 
-    return render(request, 'filtre/detall_font.html', {'font':font, 'avisos': avisos, 'fonts': Font.objects.all(), 'avui':avui, 'ahir':ahir, 'abans':abans })
+    dates = {}
+
+    for a in avisos:
+
+        catalegs = font.cataleg_set.all()
+        keys = []
+        paraules = []
+        
+        for cat in catalegs:
+            keys += re.split('\r\n',cat.frases)
+
+        match = False
+
+        for key in keys:
+            if a.coincidencia.lower().find(key) > -1:
+                paraules.append(key)
+        
+        if not dates.get(a.data.date().isoformat()):
+            dates[a.data.date().isoformat()] = {}
+        if not dates[a.data.date().isoformat()].get(a.url):
+            dates[a.data.date().isoformat()][a.url] = {}
+        if not dates[a.data.date().isoformat()][a.url].get(a.pagina):
+            dates[a.data.date().isoformat()][a.url][a.pagina] = []
+        dates[a.data.date().isoformat()][a.url][a.pagina].extend(paraules)
+        dates[a.data.date().isoformat()][a.url][a.pagina] = list(set(dates[a.data.date().isoformat()][a.url][a.pagina]))
+
+
+    dates_ordenades = []
+
+    for d in dates.items():
+        for doc, pags in d[1].items():
+            pags = list(pags.items())
+            pags.sort()
+            d[1][doc] = pags
+            print(pags)
+        dates_ordenades.insert(0,d)
+
+    dates_ordenades.sort()
+    dates_ordenades.reverse()
+
+    return render(request, 'filtre/detall_font.html', {'font':font, 'dates':dates_ordenades, 'fonts': Font.objects.all() })
 
 def comprova_font(request, font_id):
     """

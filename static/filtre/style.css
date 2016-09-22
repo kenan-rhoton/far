@@ -74,6 +74,17 @@ font-size: 12px;
 list-style-type: none;
 padding: 5px 10px 10px 10px;
 }
+
+ul.avisos {
+list-style-type: none;
+padding: 5px 10px 10px 10px;
+}
+
+.avisos li {
+list-style-type: none;
+padding: 5px 10px 10px 10px;
+}
+
 .right h2 {
 height: 30px;
 font-size: 12px;
