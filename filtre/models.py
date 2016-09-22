@@ -12,7 +12,6 @@ class Font(models.Model):
     nom = models.CharField(max_length=200)
     url = models.URLField(max_length=200)
     webfile = models.FileField(upload_to='filtre.WebFileModel/dades/nom/mimetype', blank=True, null=True)
-    horari = models.TimeField('Hora d\'actualització')
     catalegs = models.ManyToManyField('Cataleg', blank=True)
     def __str__(self):
         return self.nom

@@ -7,9 +7,9 @@ from .models import Font, Avis, Cataleg
 
 ## Aquesta classe permet gestionar el Model Font des de la aplicació d'administració
 class FontAdmin(admin.ModelAdmin):
-	list_display = ('nom', 'url', 'horari')
+	list_display = ('nom', 'url')
 	fieldsets = [
-        (None, {'fields': ['nom', 'url', 'horari', 'catalegs']}),
+        (None, {'fields': ['nom', 'url', 'catalegs']}),
     ]
             
 ## Aquesta classe permet gestionar el Model Avis des de l'aplicació d'administració (tot i que no hauria de ser necessaria i apareix sobretot a nivell informatiu)

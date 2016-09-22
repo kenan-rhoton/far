@@ -15,13 +15,13 @@ class FontTests(LiveServerTestCase):
         """
         Test innecessari per provar
         """
-        f = Font(nom="Potato",url="http://www.google.com",horari=timezone.now())
+        f = Font(nom="Potato",url="http://www.google.com")
         f.save()
 
         self.assertEqual(f, Font.objects.latest('id'))
 
     def test_es_mostra_correctament(self):
-        f = Font(nom="Potato",url="http://www.google.com",horari=timezone.now())
+        f = Font(nom="Potato",url="http://www.google.com")
         f.save()
 
         response = self.client.get(reverse('filtre:index'))
@@ -29,13 +29,13 @@ class FontTests(LiveServerTestCase):
         self.assertContains(response, "Potato")
 
     def test_comprova_font_te_arxiu_none_inicialment(self):
-        f = Font(nom="Test", url="http://www.google.com", horari=timezone.now())
+        f = Font(nom="Test", url="http://www.google.com")
         f.save()
 
         self.assertRaises(ValueError, f.webfile.name)
 
     def test_comprova_font_crea_arxiu_si_es_el_primer_cop(self):
-        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("cabbages",)), horari=timezone.now())
+        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("cabbages",)))
         f.save()
         c = Cataleg(frases="google")
         c.save()
@@ -52,7 +52,7 @@ class FontTests(LiveServerTestCase):
 
         size = len(Avis.objects.all())
 
-        f = Font(nom="Potatoes", url="http://www.google.com", horari=timezone.now())
+        f = Font(nom="Potatoes", url="http://www.google.com")
         f.save()
         c = Cataleg(frases="potatoes")
         c.save()
@@ -65,7 +65,7 @@ class FontTests(LiveServerTestCase):
 
     def test_comprova_font_no_afegeix_avis_si_esta_inicialitzat_pero_no_hi_ha_coincidencia(self):
 
-        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("cabbages",)), horari=timezone.now())
+        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("cabbages",)))
         f.save()
         c = Cataleg(frases="potatoes")
         c.save()
@@ -83,7 +83,7 @@ class FontTests(LiveServerTestCase):
 
     def test_analitza_font_afegeix_avis_si_hi_ha_coincidencia(self):
         size = len(Avis.objects.all())
-        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("potatoes\r\n<br\>potatoes\r\n<br\>cabbages\r\n<br\>soup potato",)), horari=timezone.now())
+        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("potatoes\r\n<br\>potatoes\r\n<br\>cabbages\r\n<br\>soup potato",)))
         f.save()
         c = Cataleg(frases="potatoes")
         c.save()
@@ -98,7 +98,7 @@ class FontTests(LiveServerTestCase):
 
     def test_comprova_font_afegeix_avis_si_esta_inicialitzat_i_hi_ha_coincidencia(self):
         size = len(Avis.objects.all())
-        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("cabbages",)), horari=timezone.now())
+        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("cabbages",)))
         f.save()
         c = Cataleg(frases="potatoes")
         c.save()
@@ -119,7 +119,7 @@ class FontTests(LiveServerTestCase):
 
     def test_comprova_font_caracters_extranys_no_la_lien(self):
         size = len(Avis.objects.all())
-        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("cabbages",)), horari=timezone.now())
+        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("cabbages",)))
         f.save()
         c = Cataleg(frases="Llei Orgànica 1/2004\r\nLlei catalana 5/2008\r\nviolència masclista\r\nviolència de genere\r\ndones assassinades\r\nvíctimes de violència de gènere\r\nsupervivents de violència\r\ndones immigrants\r\ntràfic de persones\r\nexplotació sexual\r\nintèrprets judicials\r\ntorns d'ofici amb especialització en matèria de violència de gènere\r\nviolència sexual\r\nformació i disponibilitat d'intèrprets\r\ndones refugiades\r\nesclavitud\r\ndenúncies de víctimes\r\nProtocol de Protecció de les Víctimes de Tràfic d'éssers Humans a Catalunya\r\nagressions sexuals\r\natenció sanitària\r\navortament")
         c.save()
@@ -139,9 +139,9 @@ class FontTests(LiveServerTestCase):
         self.assertEqual(len(Avis.objects.all()), 2)
 
     def test_comprova_actualitza_tot_crea_arxius_correctament(self):
-        f1 = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("cabbages",)), horari=timezone.now())
-        f2 = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("cabbages",)), horari=timezone.now())
-        f3 = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("cabbages",)), horari=timezone.now())
+        f1 = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("cabbages",)))
+        f2 = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("cabbages",)))
+        f3 = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("cabbages",)))
         f1.save()
         f2.save()
         f3.save()
@@ -167,7 +167,7 @@ class FontTests(LiveServerTestCase):
       """
       Actualitzar funciona quan no troba una font
       """
-      f = Font(nom="LHC",url="http://hasthelargehadroncolliderdestroyedtheworldyet.com/",horari=timezone.now())
+      f = Font(nom="LHC",url="http://hasthelargehadroncolliderdestroyedtheworldyet.com/")
       f.save()
       c = Cataleg(frases="potato")
       c.save()
@@ -183,7 +183,7 @@ class FontTests(LiveServerTestCase):
       Actualitzar funciona quan no troba una font
       """
       size = len(Avis.objects.all())
-      f = Font(nom="LHC",url="http://hasthelargehadroncolliderdestroyedtheworldyet.com/",horari=timezone.now())
+      f = Font(nom="LHC",url="http://hasthelargehadroncolliderdestroyedtheworldyet.com/")
       f.save()
       c = Cataleg(frases="potato")
       c.save()
@@ -196,7 +196,7 @@ class FontTests(LiveServerTestCase):
 
     def test_avisos_generats_tenen_data(self):
         size = len(Avis.objects.all())
-        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("potatoes\r\n<br\>potatoes\r\n<br\>cabbages\r\n<br\>soup potato",)), horari=timezone.now())
+        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("potatoes\r\n<br\>potatoes\r\n<br\>cabbages\r\n<br\>soup potato",)))
         f.save()
         c = Cataleg(frases="potatoes")
         c.save()
@@ -211,7 +211,7 @@ class FontTests(LiveServerTestCase):
 
     def test_avis_amb_data_apareix_al_detall_avis(self):
         size = len(Avis.objects.all())
-        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("potatoes\r\n<br\>potatoes\r\n<br\>cabbages\r\n<br\>soup potato",)), horari=timezone.now())
+        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("potatoes\r\n<br\>potatoes\r\n<br\>cabbages\r\n<br\>soup potato",)))
         f.save()
         c = Cataleg(frases="potatoes")
         c.save()
@@ -225,7 +225,7 @@ class FontTests(LiveServerTestCase):
 
     def test_avis_amb_data_apareix_al_detall_font(self):
         size = len(Avis.objects.all())
-        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("potatoes\r\n<br\>potatoes\r\n<br\>cabbages\r\n<br\>soup potato",)), horari=timezone.now())
+        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("potatoes\r\n<br\>potatoes\r\n<br\>cabbages\r\n<br\>soup potato",)))
         f.save()
         c = Cataleg(frases="potatoes")
         c.save()
@@ -239,7 +239,7 @@ class FontTests(LiveServerTestCase):
 
     def test_avisos_generen_font_i_num_avisos_al_index(self):
         size = len(Avis.objects.all())
-        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("potatoes\r\n<br\>potatoes\r\n<br\>cabbages\r\n<br\>soup potato",)), horari=timezone.now())
+        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("potatoes\r\n<br\>potatoes\r\n<br\>cabbages\r\n<br\>soup potato",)))
         f.save()
         c = Cataleg(frases="potatoes")
         c.save()
@@ -253,7 +253,7 @@ class FontTests(LiveServerTestCase):
 
     def test_avisos_soluciona_caracters_extranys(self):
         size = len(Avis.objects.all())
-        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("<div>potatoes\r\n<br\>™potatoes\r\n<br\>cabbages\r\n<br\>soup potato",)), horari=timezone.now())
+        f = Font(nom="Test", url=self.live_server_url+reverse('filtre:test', args=("<div>potatoes\r\n<br\>™potatoes\r\n<br\>cabbages\r\n<br\>soup potato",)))
         f.save()
         c = Cataleg(frases="potatoes")
         c.save()
