@@ -86,10 +86,14 @@ def detall_font(request, font_id):
             dates[a.data.date().isoformat()] = {}
         if not dates[a.data.date().isoformat()].get(a.url):
             dates[a.data.date().isoformat()][a.url] = {}
-        if not dates[a.data.date().isoformat()][a.url].get(a.pagina + 1):
-            dates[a.data.date().isoformat()][a.url][a.pagina + 1] = []
-        dates[a.data.date().isoformat()][a.url][a.pagina + 1].extend(paraules)
-        dates[a.data.date().isoformat()][a.url][a.pagina + 1] = list(set(dates[a.data.date().isoformat()][a.url][a.pagina + 1]))
+        if a.pagina is None:
+            pag = 0
+        else:
+            pag = a.pagina+1
+        if not dates[a.data.date().isoformat()][a.url].get(pag):
+            dates[a.data.date().isoformat()][a.url][pag] = []
+        dates[a.data.date().isoformat()][a.url][pag].extend(paraules)
+        dates[a.data.date().isoformat()][a.url][pag] = list(set(dates[a.data.date().isoformat()][a.url][pag]))
 
 
     dates_ordenades = []
