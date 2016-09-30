@@ -79,7 +79,7 @@ def detall_font(request, font_id):
         match = False
 
         for key in keys:
-            if a.coincidencia.lower().find(key) > -1:
+            if a.coincidencia.lower().find(key.lower()) > -1:
                 paraules.append(key)
         
         if not dates.get(a.data.date().isoformat()):
@@ -103,7 +103,6 @@ def detall_font(request, font_id):
             pags = list(pags.items())
             pags.sort()
             d[1][doc] = pags
-            print(pags)
         dates_ordenades.insert(0,d)
 
     dates_ordenades.sort()
@@ -172,7 +171,7 @@ def analitzar_font(font_id):
 
     for d in diff:
         for key in keys:
-            if d.lower().find(key) > -1:
+            if d.lower().find(key.lower()) > -1:
                 #Falta purgar la coincidencia de la d
                 n = Avis(coincidencia=d.replace("™", "'"),tipus='Web',url=f.url,data=timezone.now(),font=f)
                 n.save()
