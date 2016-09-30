@@ -2,9 +2,12 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[catalan]{babel}
+\usepackage[official]{eurosym}
 \usepackage{graphicx}
 \usepackage{listings}
 \usepackage{hyperref}
+
+\DeclareUnicodeCharacter{20AC}{\euro{}}
 
 \graphicspath{{images/}}
 
@@ -112,6 +115,26 @@ Per assegurar que el sistema en tot moment estigui en un estat en que cadascun d
 També es farà una documentació constant de tot el procés i de totes les comprovacions que es fan, així com totes les funcionalitats que es desenvolupen.
 
 Finalment, quan s'hagin assolit els objectius, es farà una passada final que comprovi en profunditat la capacitat d'us del sistema en conjunt amb Amnistia Internacional, i es farà una valoració de tot el treball.
+
+\newpage
+
+\subsection{Pressupost projectat}
+
+Per decidir el pressupost del projecte (completament fictici, donat que s'està realitzant de manera benèfica per a Amnistia Internacional), com a primer pas mirarem els costos bàsics que suposa.
+
+Per començar, disposem d'un sol treballador (jo mateix) que fa de dissenyador y desenvolupador de la aplicació seguint un model àgil amb reunions més o menys periòdiques amb el client (en aquest cas Amnistia Internacional, representat per l'Eduard Martínez). Les reunions amb en Xavi Burgués (tutor del projecte), no les comptabilitarem donat que son de caràcter extern al projecte en si i només una conseqüència de que sigui específicament un projecta de fi de carrera.
+
+Farem la aproximació de 12€ la hora per un dissenyador/desenvolupador, i donat que amb el càlcul inicial s'ha establert un mínim absolut de 120 hores realitzades en sis sprints de 20 hores, ja tenim una base mínima de 1440€.
+
+Ara bé, a aquest mínim ideal que no contempla cap de les múltiples dificultats possible que poden sortir en un projecte, com a aproximació també del temps necessitat per a la solució d'errors i la adaptació a nous requisits emergents que podem desconèixer en un principi, multiplicarem aquestes hores per un factor de tres, arribant a 360 hores treballades.
+
+Adicionalment, hem de considerar el temps per les reunions necessàries i altres tasques que no son directament disseny i desenvolupament com poden ser la documentació del sistema o l'anàlisi de l'estat de l'art. Amb aquest fi comptarem unes 50 hores necessàries.
+
+Finalment, a hores d'oficialment començar aquest projecte ja es compta amb una versió bàsica del producte en un estat molt precari però que serveix com a prova de concepte en el qual s'han invertit 20 hores.
+
+En total, arribem a 360 + 50 + 20 = 430 hores, que a 12€ per hora surt a un cost de 5660€.
+
+Si hi afegim un marge per coses com a la quota d'autònoms (50€ mensuals degut a la edat), i altres possibles gastos, podem de manera còmoda establir un cost per al projecte d'aproximadament 6000€ com a raonable.
 
 \newpage
 
@@ -279,7 +302,7 @@ class WebFileModel(models.Model):
 
 \subsection{Casos d'us}
 
-
+A continuació detallem els casos d'us especificats en el llenguatge Gherkin, dissenyat per a documentació.
 
 \subsubsection{Afegir una font}
 
@@ -462,7 +485,24 @@ Pel deployment del projecte s'ha decidit fer servir Heroku per diversos motius:
 
 \newpage
 
-\subsection{Implementació}
+\subsection{Estructura del projecte}
+
+El projecte está organitzat seguint l'estructura estàndar de Django, similar al MVC\@.
+
+Dins el nostre projecte ``far'' hem inclós una aplicació ``filtre'' on resideix tot el nostre codi. El codi está dividit en:
+
+\begin{description}
+    \item[filtre/models.py] on descrivim els models de dades que es fan servir a la aplicació.
+    \item[filtre/views.py] on es fan totes les operacions necessàries per a presentar cada vista.
+    \item[filtre/templates/filtre] on están tots els arxius de HTMLDjango que descriuen com son les vistes.
+    \item[filtre/admin.py] on es descriu tot el panell d'administració.
+    \item[filtre/tests.py] on hi han localitzats tots els tests de la aplicació.
+    \item[filtre/urls.py] on está indicat a quina acció o vista va assignada cada URL de la aplicació.
+    \item[requirements.txt] on están totes les dependències del sistema.
+    \item[Procfile] on están les instruccions de llançament del sistema.
+\end{description}
+
+Seguint aquesta estructura, s'ha pogut desenvolupar tot el codi com a aplicació de Django completament modular, i s'ha procurat seguir els estàndars de Django per aconseguir en la mesura del possible que el codi sigui el màxim de comprensible i extensible.
 
 \newpage
 
@@ -478,7 +518,7 @@ Així que vam haver de buscar-hi solucions alternatives.
     \item[Pàgina sencera] Una de les primeres solucions que ve al cap és senzillament mirar tota la pàgina, però llavors ens trobem problemes de falsos positius i de duplicació que hauríem de gestionar. Fent proves arribem a la conclusió que els falsos positius no són un problema però la duplicació si.
     \item[Selecció per miniweb] Una altra solució investigada és que per seleccionar l'àrea de notícies s'obris la pàgina en una vista especial que permetés a l'usuari seleccionar una zona i que el sistema pogués extreure l'XPath. Es va jutjar costosa en temps d'implementar i propensa a errors.
     \item[Selecció per text] També es va considerar la possibilitat de que l'usuari li indiqués tres o quatre noticies d'exemple al sistema, i que s'escanegés la web per deduuir l'XPath. Resulta ser molt engorrós per l'usuari, difícil d'implementar i propens a errors.
-    \item[Canvis] Finalment, va sorgir la idea de, enlloc de mirar la pàgina sencera i prou, guardar l'estat de la pàgina i només comprovar els canvis quehi hagin, reduïnt falsos positius i duplicacions al mínim.
+    \item[Canvis] Finalment, va sorgir la idea de, enlloc de mirar la pàgina sencera i prou, guardar l'estat de la pàgina i només comprovar els canvis que hi hagin, reduïnt falsos positius i duplicacions al mínim.
 \end{description}
 
 \newpage
@@ -490,6 +530,8 @@ Fer servir la plataforma de deployment Heroku, tot i ser coneguda, no ha estat s
 En primer lloc, Heroku no suporta bases de dades SQLite donat que fa servir diferents contenidors inmutables. Per sort, va ser prou senzill fer el canvi a PostrgeSQL ja que Django té bona documentació al respecte.
 
 El problema gran va venir a l'hora de fer el canvi a la nostra solució, ja que haviem de guardar l'estat de cada Font. Inicialment, degut a que no es va tenir en compte la inmutabilitat de Heroku, es van guardar els canvis en un sistema de fitxers, ja que Django un altre cop ho fa molt senzill. Però clar, al pujar els canvis a Heroku això no funcionava.
+
+El motiu és perque, degut al sistema de contenidors inmutables d'Heroku, cada cop que es fa una petició web pot respondre qualsevol dels contenidors, i per tant pot no només no disposar dels arxius prèviament ``guardats'', sino que en quant un contenidor esdevé inactiu es esborrat completament i la informació guardada amb ell. Per tant resulta inviable guardar coses a qualsevol lloc que no sigui la base de dades (separada del contenidor).
 
 És va optar per fer servir el plugin dgango-db-file-storage per poder, sense canviar gaire codi, guardar aquest arxius a la base de dades, però malhauradament no està tan ben documentat i han calgut molts ajustos per aconseguir que funcionés correctament. Per sort, la filosofia TDD va permetre que fos fàcil detectar quins canvis no funcionaven i va retallar el temps d'aquest canvi, tot i que va continuar sent considerable.
 
@@ -520,8 +562,8 @@ Però com per a Amnistia Internacional result vital aquesta part, hem fet estudi
 \subsection{Setembre.1 2015 --- 20h}
 
 \begin{itemize}
-    \item Reunió amb Xavi per discutir el projecte.
-    \item Reunió amb Eduard per establir els requisits del projecte.
+    \item Reunió amb Xavi (tutor) per discutir el projecte.
+    \item Reunió amb Eduard (d'Amnistia) per establir els requisits del projecte.
     \item Requisits inicials: 
     \begin{itemize}
         \item Cerca de paraules clau a webs
@@ -594,19 +636,21 @@ Però com per a Amnistia Internacional result vital aquesta part, hem fet estudi
     \item Documentacó del projecte
 \end{itemize}
 
+\subsection{Setembre 2016 --- 30h}
+
+\begin{itemize}
+    \item Reunió amb Eduard: Canvis d'usabilitat de l'eina
+    \item Canvi de paradigma d'Avisos a nivell purament visual
+    \item Documentacó del projecte
+\end{itemize}
+
 \subsection{Resum}
 
 \begin{itemize}
-    \item Total: 200h
+    \item Total programació: 230h (Només hi han comptades les hores de programació real)
+    \item Aproximació de documentació, reunions i investigació: 100h
+    \item \textbf{Total:} 330h
 \end{itemize}
-
-1. Requisits inicials + Selecció de tecnologies
-2. Construcció d'una plataforma bàsica (Django, Heroku, gunicorn, PostgreSQL, inici TDD)
-3. Catàlegs
-4. Reevaluació de requisits i inici de l'anàlisi de PDFs
-5. Finalització de l'anàlisi de PDFs
-6. Reevaluació de requisits i funcionalitats vàries
-7. Canvi de paradigma de crawling i inclusió de anàlisi
 
 \newpage
 
@@ -1017,31 +1061,48 @@ Comprovem que els avisos no donen cap problema al trobarse amb caràcters extran
 
 \section{Objectius coberts}
 
-\subsection{Detecció de notícies clau}
+\subsection{Detecció de notícies clau --- Assolit}
 
-El sistema compleix el seu objectiu de ser capaç de detectar les notícies que contenen paraules clau, en especial dins de documents PDF.
+El sistema compleix el seu objectiu de ser capaç de detectar les notícies que contenen paraules clau, en especial dins de documents PDF\@.
 
-(Assolit)
 
-\subsection{Indexació de la informació}
+\subsection{Indexació de la informació --- Millorable}
 
 El sistema indexa la informació correctament però encara no ofereix a l'usuari prous eines per explotar aquest fet: manquen més mecanismes de cerca i d'agrupació dels resultats.
 
-(Millorable)
 
-\subsection{Extensibilitat}
+\subsection{Extensibilitat --- Assolit}
 
-(Assolit)
+Gràcies a la gran modularitat intrínseca de Django, aquest objectiu ha resultat completament trivial. És molt fàcil a través de mòduls extendre el sistema així com incloure'l com a subsistema en un projecte més gran.
 
-\subsection{Flexibilitat}
+\subsection{Flexibilitat --- Assolit}
 
-(Assolit)
+El sistema funciona per a diferents tipus de documents i no només per a cerques en web. En particular, és l'únic sistema a data d'avuí que permet monitoritzar canvis en pàgines on s'actualitzen documents PDF\@.
 
-\subsection{Usabilitat}
+
+\subsection{Usabilitat --- Millorable}
 
 El sistema es usable però molt millorable sobretot en quant a la presentació de la informació: pàgines de resultats millor organitzades i amb informació més concreta serien un gran avenç.
 
-(Millorable)
+
+\newpage
+
+\section{Valoració del client}
+
+En terminar el projecte a presentar, s'ha fet una reunió adicional amb l'Eduard Martínez, responsable d'Amnistia Internacional de Catalunya per evaluar el resultat.
+
+La percepció ha estat que la eina és sens dubte útil i provoca un estalvi de temps considerables, agilitzant molt la feina diària en quant a la monitorització i resposta a notícies d'interès.
+
+Tot i això, s'hi han trobat alguns aspectes que, tot i ser funcionals i no prioritaris, es podrien millorar:
+
+\begin{description}
+    \item[Vista d'avisos] La vista dels avisos encara no està perfecte i potser s'hi podria condensar una mica més la informació per haver de minimitzar la quantitat de decisions que s'han de prendre i poder establir de manera ràpida quins punts són d'interés real per a Amnistia.
+    \item[Cerca d'avisos] La cerca d'avisos completa (on senzillament segons diferents criteris podem filtrar tots els avisos del sistema) encara no està implementada
+\end{description}
+
+Malgrat això, la impressió del client ha sigut definintivament \textbf{positiva} i l'eina és considerada \textbf{útil} segons els requisits indicats.
+
+Cal també aclarir que amb el client s'ha acordat la continuació del suport i millora de l'eina passat el termini del projecte, ja que l'objectiu personal del sistema és la seva utilitat i que es faci servir, de manera que aquestes millores es calcula que estaràn operatives abans del final de l'any, i podria encara afegir-se alguna funcionalitat més en el futur.
 
 \newpage
 
@@ -1061,11 +1122,11 @@ Fa falta donar més opcions a l'usuari per fer cerques sobre els avisos, i possi
 
 \section{Manual d'usuari}
 
-A continuació detallem els passos necessaris per a posar en funcionament el sistema com a usuari, així com el seu ús habitual.
+A continuació detallem els passos necessaris per a posar en funcionament el sistema com a usuari, així com el seu ús habitual. Com veureu, s'ha intentat simplificar al màxim tots els casos d'us, donat el seu objectiu com a eina per a estalviar temps.
 
 \subsection{Configuració inicial}
 
-En primer lloc és necessari definir en quines webs volem monitoritzar la informació i quines paraules clau busquem. Per a fer-ho serà necessari primer de tot accedir al panell d'administració a través de la url /admin (en aquest cas \url{http://mighty-ridge-1447.herokuapp.com}).
+En primer lloc és necessari definir en quines webs volem monitoritzar la informació i quines paraules clau busquem. Per a fer-ho serà necessari primer de tot accedir al panell d'administració a través de la url /admin (en aquest cas \url{http://mighty-ridge-1447.herokuapp.com/admin}).
 
 Un cop a dins, cal crear les fonts i els catàlegs des dels seus respectius panells d'administració, incloent-hi els seguents camps:
 
@@ -1085,6 +1146,11 @@ Un cop a dins, cal crear les fonts i els catàlegs des dels seus respectius pane
 
 Un cop fet, automàticament de manera periòdica s'analitzarà la URL en qüestió buscant noves coincidencias a la pàgina o a documents continugts.
 
+\subsection{Estructura de la aplicació}
+
+La visualització de la aplicació és molt senzilla: comptem amb una vista general a la pàgina inicial (\url{http://mighty-ridge-1447.herokuapp.com}), on es pot veure un resum dels avisos trobats, agrupats per Data i per Font. A cada Font s'indica la quantitat d'avisos trobats a aquella data.
+
+Quan cliquem a qualsevol font, entrem a la vista de detall de la font, on es veuen els avisos agrupats per Data i per Documents. També trobem, en el cas de documents PDF, informació sobre la pàgina específica on s'ha trobat la coincidència. En qualsevol cas s'indiquen les paraules clau que s'han detectat, a més d'un enllaç al Document corresponent.
 
 \newpage
 
