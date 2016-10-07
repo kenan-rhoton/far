@@ -28,7 +28,7 @@
             <h3>{{data}}</h3>
             <ul class="avisos">
             {% for document, pages in documents.items %}
-                <li>Document: <a href="{{document}}">{{document}}</a>
+                <li>Document: <a target="_blank" href="{{document}}">{{document}}</a>
                 <ul>
                 {% for page, paraules in pages %}
                     <li>Pàg. {{page}}: 
